@@ -5,49 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Veluna</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Подключаем изящные рукописные кириллические шрифты для безупречного рендеринга -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        /* Импортируем изящный рукописный шрифт Vasek */
-        @font-face {
-            font-family: 'Vasek';
-            src: url('https://localfonts.eu/wp-content/uploads/fonts/vasek/Vasek.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <style>
         :root {
-            --bg-app: #0e1013;
-            --bg-card: #14171a;
-            --border-flat: #22262b;
-            --text-main: #f1f5f9;
-            --text-muted: #8a99ad;
-            --accent: #e2e8f0;
-            --bg-input: #14171a;
+            --bg-app: #09090b;
+            --bg-card: #121214;
+            --border-flat: #27272a;
+            --text-main: #f4f4f5;
+            --text-muted: #71717a;
+            --accent: #ffffff;
+            --bg-input: #18181b;
+            --mono-font: 'Geist Mono', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         }
 
         body.light-theme {
-            --bg-app: #fcfcfc;
+            --bg-app: #fafafa;
             --bg-card: #ffffff;
-            --border-flat: #e5e9f0;
-            --text-main: #181c22;
-            --text-muted: #6b7c93;
-            --accent: #2e3440;
-            --bg-input: #fcfcfc;
+            --border-flat: #e4e4e7;
+            --text-main: #09090b;
+            --text-muted: #a1a1aa;
+            --accent: #000000;
+            --bg-input: #f4f4f5;
         }
 
         body {
             background-color: var(--bg-app);
             color: var(--text-main);
-            /* Применяем Vasek, c резервом на Caveat и Comfortaa */
-            font-family: 'Vasek', 'Caveat', 'Comfortaa', cursive, sans-serif;
+            font-family: 'Geist', -apple-system, BlinkMacSystemFont, "San Francisco", "Segoe UI", Roboto, sans-serif;
             -webkit-tap-highlight-color: transparent;
-            font-size: 1.25rem;
-            transition: background-color 0.25s ease, color 0.25s ease;
+            font-size: 0.95rem;
+            letter-spacing: -0.01em;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .font-mono {
+            font-family: var(--mono-font);
         }
 
         .custom-card {
@@ -65,162 +61,195 @@
             color: var(--text-main);
         }
 
+        .text-muted {
+            color: var(--text-muted);
+        }
+
+        /* Унифицированные кнопки одинакового строгого размера */
+        .btn-ui {
+            height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-flat);
+            background-color: var(--bg-card);
+            font-family: var(--mono-font);
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.15s ease;
+        }
+        
+        .btn-ui:active {
+            transform: scale(0.98);
+            background-color: var(--border-flat);
+        }
+
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* Строгая, благородная анимация появления - без циклов */
-        .animate-enter {
-            animation: flatEnter 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        /* Строгая флэт-анимация перехода */
+        .animate-fade {
+            animation: flatFade 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        @keyframes flatEnter {
-            0% { opacity: 0; transform: translateY(6px); }
+        @keyframes flatFade {
+            0% { opacity: 0; transform: translateY(4px); }
             100% { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
-<body class="h-screen flex flex-col justify-between overflow-hidden select-none">
+<body class="h-screen flex flex-col justify-between overflow-hidden select-none relative">
 
-    <!-- ШАПКА ПРИЛОЖЕНИЯ: Чистый Флэт-Минимализм -->
-    <header class="custom-border border-b px-5 py-4 flex items-center justify-between shrink-0 sticky top-0 z-30 bg-opacity-95 backdrop-blur-sm">
-        <div class="flex items-center gap-2.5 cursor-pointer" onclick="location.reload()">
-            <span class="material-icons-round text-lg">auto_awesome</span>
-            <span class="font-bold text-2xl tracking-wide uppercase">Veluna</span>
+    <div class="pointer-events-none absolute inset-0 z-40 opacity-[0.03] dark:opacity-[0.05] overflow-hidden">
+        <svg class="absolute top-10 right-10 w-24 h-24 text-current" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1">
+            <circle cx="50" cy="50" r="40" stroke-dasharray="2 4"/>
+            <line x1="50" y1="0" x2="50" y2="100"/>
+            <line x1="0" y1="50" x2="100" y2="50"/>
+        </svg>
+        <svg class="absolute bottom-4 left-4 w-32 h-12 text-current" viewBox="0 0 120 40" fill="none" stroke="currentColor" stroke-width="0.5">
+            <path d="M0,10 H120 M0,20 H120 M0,30 H120 M20,0 V40 M40,0 V40 M60,0 V40 M80,0 V40 M100,0 V40"/>
+        </svg>
+    </div>
+
+    <header class="custom-border border-b px-6 h-16 flex items-center justify-between shrink-0 bg-opacity-80 backdrop-blur-md z-30">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="location.reload()">
+            <svg class="w-4 h-4 text-current" viewBox="0 0 16 16" fill="currentColor">
+                <rect x="1" y="1" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <rect x="9" y="9" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M1 15L15 1" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            <span class="font-mono font-semibold text-sm tracking-widest uppercase">VELUNA</span>
         </div>
         
-        <!-- Кнопка смены темы -->
-        <button onclick="toggleTheme()" class="custom-card p-2 rounded-lg flex items-center justify-center transition active:scale-95">
-            <span id="theme-icon" class="material-icons-round text-base">light_mode</span>
+        <button onclick="toggleTheme()" class="w-9 h-9 border custom-border flex items-center justify-center transition active:bg-zinc-500/10">
+            <svg id="theme-icon-svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5"/>
+                <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
         </button>
     </header>
 
-    <!-- ВЫДЕЛЕННАЯ ЛЕНТА БАЛАНСА (РЕШАЕТ ПРОБЛЕМУ НАЛОЖЕНИЯ КНОПОК) -->
-    <section class="custom-border border-b px-5 py-2.5 flex items-center justify-between shrink-0 text-sm opacity-90">
-        <div class="flex items-center gap-1.5">
-            <span class="opacity-60 text-xs">Запас:</span>
+    <section class="custom-border border-b px-6 h-10 flex items-center justify-between shrink-0 text-xs font-mono bg-zinc-500/[0.02]">
+        <div class="flex items-center gap-2">
+            <span class="text-muted uppercase tracking-wider text-[10px]">Запас:</span>
             <div class="flex items-center gap-1">
-                <span id="gems-count" class="font-bold">..</span>
-                <span class="text-xs opacity-70">💎 Гем.</span>
+                <span id="gems-count" class="font-semibold">..</span>
+                <span class="text-muted">GEM</span>
             </div>
         </div>
-        <div class="h-3 w-px bg-slate-500 opacity-20"></div>
-        <div class="flex items-center gap-1.5">
-            <span class="opacity-60 text-xs">Лимит связи:</span>
+        <div class="h-3 w-px custom-border border-l"></div>
+        <div class="flex items-center gap-2">
+            <span class="text-muted uppercase tracking-wider text-[10px]">Лимит связи:</span>
             <div class="flex items-center gap-1">
-                <span id="credits-count" class="font-bold">..</span>
-                <span class="text-xs opacity-70">✉️ Кред.</span>
+                <span id="credits-count" class="font-semibold">..</span>
+                <span class="text-muted">CRED</span>
             </div>
         </div>
     </section>
 
-    <!-- ГЛАВНОЕ МЕНЮ (СПИСОК ВАЙФУ) -->
-    <main id="view-menu" class="flex-1 overflow-y-auto p-5 space-y-5 no-scrollbar animate-enter">
+    <main id="view-menu" class="flex-1 overflow-y-auto p-6 space-y-6 no-scrollbar animate-fade">
         
-        <!-- Инфо-блок связи и рефералов -->
-        <div class="custom-card rounded-lg p-5 space-y-3.5">
+        <div class="custom-card p-6 space-y-4 relative overflow-hidden">
+            <svg class="absolute -right-4 -bottom-4 w-24 h-24 text-muted opacity-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <path d="M3 3h18v18H3zM21 3L3 21"/>
+            </svg>
+
             <div class="flex items-center gap-2">
-                <span class="material-icons-round text-base">card_giftcard</span>
-                <h4 class="font-bold text-base uppercase tracking-wider">Пополнение Баланса</h4>
+                <span class="font-mono text-xs text-muted">[СИНХРОНИЗАЦИЯ]</span>
+                <h4 class="font-mono font-medium text-xs uppercase tracking-wider">Управление балансом</h4>
             </div>
-            <p class="text-xs leading-relaxed opacity-75">
-                Баланс защищен от прямого редактирования. Вы можете бесплатно пригласить 3 друзей через нашего бота для начисления 30 кредитов, пополнить баланс через Telegram Stars командой <span class="font-bold underline">/gems</span> в чате бота, либо выполнить обмен ваших Гемов ниже.
+            <p class="text-xs font-light leading-relaxed text-muted max-w-xl">
+                Прямая модификация кошелька заблокирована протоколом. Бесплатно: отправьте приглашение трем новым контактам для открытия сессии на 30 кредитов. Пополнение: используйте команду <span class="font-mono text-current underline">/gems</span> непосредственно внутри бота Telegram.
             </p>
-            <div class="flex gap-2.5 pt-1">
-                <button onclick="shareInviteLink()" class="flex-1 custom-card hover:bg-slate-50/5 hover:text-slate-200 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition active:scale-[0.98]">
-                    <span class="material-icons-round text-sm">share</span> Пригласить
+            <div class="flex gap-3 pt-2">
+                <button onclick="shareInviteLink()" class="btn-ui flex-1 btn-action">
+                    <svg class="w-3 h-3 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v8M16 6l-4-4-4 4M12 2v13"/></svg>Пригласить
                 </button>
-                <button onclick="openExchangeModal()" class="flex-1 custom-card hover:bg-slate-50/5 hover:text-slate-200 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition active:scale-[0.98]">
-                    <span class="material-icons-round text-sm">currency_exchange</span> Обменять Гемы
+                <button onclick="openExchangeModal()" class="btn-ui flex-1 btn-action">
+                    <svg class="w-3 h-3 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg>Обменять
                 </button>
             </div>
         </div>
 
-        <div class="space-y-0.5">
-            <h2 class="text-xs font-bold uppercase tracking-widest opacity-50">Выбор собеседника</h2>
-            <p class="text-xl font-bold tracking-wide">Доступные ИИ Компаньоны</p>
+        <div class="space-y-1">
+            <span class="font-mono text-[10px] uppercase tracking-widest text-muted">Core Modules</span>
+            <h2 class="text-sm font-medium uppercase tracking-wider">Доступные терминалы ИИ</h2>
         </div>
 
-        <!-- Сетка карточек -->
-        <div class="grid grid-cols-1 gap-4" id="characters-list">
-            <div class="text-center p-12 text-sm font-bold flex flex-col items-center justify-center gap-3 custom-card border-dashed rounded-lg">
-                Синхронизация данных...
+        <div class="grid grid-cols-1 gap-3" id="characters-list">
+            <div class="text-center py-12 font-mono text-xs text-muted custom-card border-dashed">
+                Инициализация потоков данных...
             </div>
         </div>
     </main>
 
-    <!-- ЭКРАН СТРОГОГО МИНИМАЛИСТИЧНОГО ЧАТА -->
-    <main id="view-chat" class="hidden flex-1 flex-col justify-between overflow-hidden animate-enter">
-        <!-- Шапка чата -->
-        <div class="custom-border border-b p-3.5 flex items-center justify-between z-10 bg-opacity-95 backdrop-blur-sm">
-            <div class="flex items-center gap-3">
-                <button onclick="closeChat()" class="p-2 rounded-lg custom-card flex items-center justify-center active:scale-95">
-                    <span class="material-icons-round text-base">arrow_back</span>
+    <main id="view-chat" class="hidden flex-1 flex-col justify-between overflow-hidden animate-fade">
+        <div class="custom-border border-b px-6 h-16 flex items-center justify-between z-10 bg-opacity-80 backdrop-blur-md">
+            <div class="flex items-center gap-4">
+                <button onclick="closeChat()" class="w-9 h-9 border custom-border flex items-center justify-center active:bg-zinc-500/10">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
                 </button>
-                <img id="chat-avatar" src="" alt="" class="w-10 h-10 rounded-lg object-cover border custom-border">
+                <img id="chat-avatar" src="" alt="" class="w-9 h-9 grayscale contrast-125 object-cover border custom-border">
                 <div>
-                    <h3 id="chat-name" class="font-bold text-lg"></h3>
-                    <span id="chat-status" class="text-xs font-bold opacity-50 uppercase block"></span>
+                    <h3 id="chat-name" class="font-medium text-sm tracking-wide"></h3>
+                    <span id="chat-status" class="font-mono text-[9px] text-muted uppercase tracking-wider block mt-0.5"></span>
                 </div>
             </div>
         </div>
 
-        <!-- Область истории чата -->
-        <div id="chat-history" class="flex-1 overflow-y-auto p-5 space-y-4 no-scrollbar bg-transparent"></div>
+        <div id="chat-history" class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar bg-transparent"></div>
 
-        <!-- Поле ввода сообщения -->
-        <div class="p-4 custom-border border-t">
-            <div class="flex gap-2.5 items-center">
-                <input type="text" id="message-input" placeholder="Напишите сообщение..." 
-                       class="flex-1 custom-input rounded-lg px-4 py-3 text-base focus:outline-none focus:border-slate-500 transition"
-                       onkeypress="if(event.key === 'Enter') handleSend()">
+        <div class="p-4 custom-border border-t bg-opacity-50 backdrop-blur-sm">
+            <div class="flex gap-3 items-center">
+                <input type="text" id="message-input" placeholder="Введите текстовый запрос..." 
+                       class="flex-1 custom-input h-11 px-4 text-sm focus:outline-none focus:border-zinc-500 font-light transition">
                 
-                <button onclick="handleSend()" id="send-btn" class="custom-card hover:bg-slate-50/5 active:scale-95 p-3 rounded-lg transition flex items-center justify-center shrink-0">
-                    <span class="material-icons-round text-base">send</span>
+                <button onclick="handleSend()" id="send-btn" class="w-11 h-11 border custom-border flex items-center justify-center active:bg-zinc-500/10 transition shrink-0">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                 </button>
             </div>
-            <div class="flex items-center gap-2 mt-2 px-1 opacity-40">
-                <span class="material-icons-round text-xs">info</span>
-                <p class="text-[11px] uppercase tracking-wider">Каждое отправленное сообщение списывает 1 кредит связи</p>
+            <div class="flex items-center gap-2 mt-2 px-1 text-muted font-mono text-[9px] uppercase tracking-wider opacity-70">
+                <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <span>Тарификация: 1 транзакция = 1 CRED</span>
             </div>
         </div>
     </main>
 
-    <!-- ФЛЭТ-МОДАЛКА ОБМЕНА -->
-    <div id="exchange-modal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-5">
-        <div class="custom-card rounded-lg w-full max-w-sm p-6 space-y-4">
+    <div id="exchange-modal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-6 backdrop-blur-xs">
+        <div class="custom-card w-full max-w-xs p-6 space-y-5 animate-fade">
             <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                    <span class="material-icons-round text-base">currency_exchange</span>
-                    <h3 class="font-bold text-base uppercase tracking-wider">Конвертировать</h3>
+                <div class="flex items-center gap-2 font-mono text-xs">
+                    <span class="text-muted">[CONVERT]</span>
                 </div>
-                <button onclick="closeExchangeModal()" class="p-1 rounded-md hover:opacity-75 transition">
-                    <span class="material-icons-round text-base">close</span>
+                <button onclick="closeExchangeModal()" class="text-muted hover:text-current transition">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 </button>
             </div>
-            <p class="text-xs leading-relaxed opacity-80">
-                Конвертируйте ваши премиальные Гемы в Кредиты текстовой связи по фиксированному курсу: <span class="font-bold">1 Gem = 2 Кредита</span>.
+            <p class="text-xs font-light leading-relaxed text-muted">
+                Перерасчет баланса по фиксированному курсу: <span class="font-mono font-medium text-current">1 GEM = 2 CRED</span>. Операция необратима.
             </p>
-            <div class="space-y-1.5">
-                <label class="text-xs font-bold opacity-50 uppercase tracking-widest block">Количество к списанию</label>
-                <input type="number" id="exchange-amount" value="1" min="1" class="w-full custom-input rounded-lg p-2.5 text-base font-bold focus:outline-none">
+            <div class="space-y-2">
+                <label class="font-mono text-[9px] text-muted uppercase tracking-widest block">Объем конверсии</label>
+                <input type="number" id="exchange-amount" value="1" min="1" class="w-full custom-input h-10 px-3 font-mono text-sm focus:outline-none focus:border-zinc-500">
             </div>
-            <button onclick="submitExchange()" class="w-full custom-card py-3 rounded-lg text-xs font-bold uppercase tracking-wider hover:bg-slate-50/5 transition">
-                Подтвердить обмен
+            <button onclick="submitExchange()" class="btn-ui w-full">
+                Выполнить обмен
             </button>
         </div>
     </div>
 
-    <!-- КЛИЕНТСКИЙ СЦЕНАРИЙ -->
     <script>
         const BACKEND_URL = "https://sqwerxx-veluna.hf.space";
         let userId = 123456789; 
         let currentCharacterId = null;
         let globalCharacters = [];
 
-        // Инициализация темы из локального хранилища
+        // Инициализация темы
         if (localStorage.getItem('theme') === 'light') {
             document.body.classList.add('light-theme');
-            document.getElementById('theme-icon').innerText = 'dark_mode';
+            updateThemeIcon(true);
         }
 
         function toggleTheme() {
@@ -228,7 +257,24 @@
             body.classList.toggle('light-theme');
             const isLight = body.classList.contains('light-theme');
             localStorage.setItem('theme', isLight ? 'light' : 'dark');
-            document.getElementById('theme-icon').innerText = isLight ? 'dark_mode' : 'light_mode';
+            updateThemeIcon(isLight);
+        }
+
+        function updateThemeIcon(isLight) {
+            const iconSvg = document.getElementById('theme-icon-svg');
+            if (isLight) {
+                // Луна для светлой темы (переключение на темную)
+                iconSvg.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
+            } else {
+                // Солнце для темной темы (переключение на светлую)
+                iconSvg.innerHTML = `
+                    <circle cx="12" cy="12" r="5"/>
+                    <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                    <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                `;
+            }
         }
 
         if (window.Telegram && window.Telegram.WebApp) {
@@ -263,36 +309,36 @@
 
                 if (globalCharacters.length === 0) {
                     listContainer.innerHTML = `
-                        <div class="text-center p-8 text-xs font-bold custom-card rounded-lg opacity-60">
-                            Персонажи отсутствуют. Создайте их в админ-панели бота.
+                        <div class="text-center py-10 font-mono text-xs text-muted custom-card border-dashed">
+                            Репозиторий пуст. Создайте персонажей в админ-панели.
                         </div>`;
                     return;
                 }
 
                 globalCharacters.forEach(char => {
                     const card = document.createElement('div');
-                    card.className = "custom-card rounded-lg p-4 flex items-center justify-between hover:bg-slate-500/5 transition duration-200 transform active:scale-[0.99] cursor-pointer animate-enter";
+                    card.className = "custom-card p-4 flex items-center justify-between hover:border-zinc-500/50 transition duration-150 cursor-pointer animate-fade";
                     card.onclick = () => openChat(char.id);
                     
                     card.innerHTML = `
-                        <div class="flex items-center gap-4">
-                            <img src="${char.avatar}" alt="${char.name}" class="w-14 h-14 rounded-lg object-cover border custom-border shrink-0">
-                            <div class="space-y-0.5">
-                                <span class="text-[10px] uppercase tracking-wider opacity-50 font-bold">${char.tag}</span>
-                                <h3 class="font-bold text-base tracking-wide">${char.name}</h3>
-                                <p class="text-xs opacity-75">${char.status}</p>
+                        <div class="flex items-center gap-4 overflow-hidden">
+                            <img src="${char.avatar}" alt="${char.name}" class="w-12 h-12 grayscale contrast-125 object-cover border custom-border shrink-0">
+                            <div class="space-y-0.5 min-w-0">
+                                <span class="font-mono text-[9px] uppercase tracking-wider text-muted block truncate">${char.tag}</span>
+                                <h3 class="font-medium text-sm tracking-wide text-current">${char.name}</h3>
+                                <p class="text-xs text-muted truncate">${char.status}</p>
                             </div>
                         </div>
-                        <div class="p-2.5 rounded-lg flex items-center justify-center opacity-60">
-                            <span class="material-icons-round text-base">forum</span>
+                        <div class="p-2 text-muted shrink-0">
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                         </div>
                     `;
                     listContainer.appendChild(card);
                 });
             } catch (error) {
                 document.getElementById('characters-list').innerHTML = `
-                    <div class="text-center p-8 text-xs font-bold custom-card rounded-lg border-dashed">
-                        Ошибка подключения к бэкенд серверу.
+                    <div class="text-center py-10 font-mono text-xs text-muted custom-card border-dashed border-red-900/30">
+                        Ошибка терминала: нет ответа от сервера среды.
                     </div>`;
             }
         }
@@ -332,7 +378,7 @@
             appendMessage(text, 'user');
             input.value = '';
 
-            const typingId = appendMessage("Генерация мысли...", 'assistant-typing');
+            const typingId = appendMessage("Обработка нейросетью...", 'assistant-typing');
 
             try {
                 const response = await fetch(`${BACKEND_URL}/api/chat`, {
@@ -349,7 +395,7 @@
 
                 if (!response.ok) {
                     const err = await response.json();
-                    appendMessage(err.detail || 'Критический сбой нейро-модуля.', 'system');
+                    appendMessage(err.detail || 'Критический сбой сигнального модуля.', 'system');
                     return;
                 }
 
@@ -359,7 +405,7 @@
 
             } catch (error) {
                 if (document.getElementById(typingId)) document.getElementById(typingId).remove();
-                appendMessage("Не удалось получить ответ. Соединение разорвано.", 'system');
+                appendMessage("Обрыв связи. Проверьте сетевое окружение.", 'system');
             }
         }
 
@@ -380,7 +426,7 @@
 
                 if (!response.ok) {
                     const err = await response.json();
-                    alert(err.detail || "Недостаточно Гемов на вашем балансе.");
+                    alert(err.detail || "Недостаточно средств в GEM-секторе.");
                     return;
                 }
 
@@ -389,14 +435,14 @@
                 document.getElementById('credits-count').innerText = data.credits;
                 closeExchangeModal();
             } catch (error) {
-                alert("Ошибка во время отправки операции.");
+                alert("Транзакция отклонена шлюзом.");
             }
         }
 
         function shareInviteLink() {
             const botUsername = "VelunaAIbot"; 
             const inviteLink = `https://t.me/${botUsername}?start=ref_${userId}`;
-            const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(inviteLink)}&text=${encodeURIComponent("Заходи в Veluna — пообщаемся!")}`;
+            const shareUrl = `https://t.me/share/url?url={encodeURIComponent(inviteLink)}&text=${encodeURIComponent("Подключение к Veluna Hub.")}`;
             if (window.Telegram && window.Telegram.WebApp) {
                 window.Telegram.WebApp.openTelegramLink(shareUrl);
             } else {
@@ -410,18 +456,18 @@
             const wrapper = document.createElement('div');
             
             if (sender === 'user') {
-                wrapper.className = "flex max-w-[85%] ml-auto justify-end animate-enter";
-                wrapper.innerHTML = `<div class="custom-card rounded-lg rounded-tr-none px-4 py-2.5 text-base opacity-90">${text}</div>`;
+                wrapper.className = "flex max-w-[85%] ml-auto justify-end animate-fade";
+                wrapper.innerHTML = `<div class="custom-card px-4 py-2 text-sm">${text}</div>`;
             } else if (sender === 'assistant') {
-                wrapper.className = "flex max-w-[85%] animate-enter";
-                wrapper.innerHTML = `<div class="custom-card rounded-lg rounded-tl-none px-4 py-2.5 text-base leading-relaxed">${text.replace(/\n/g, '<br>')}</div>`;
+                wrapper.className = "flex max-w-[85%] animate-fade";
+                wrapper.innerHTML = `<div class="custom-card bg-zinc-500/[0.03] px-4 py-2.5 text-sm leading-relaxed">${text.replace(/\n/g, '<br>')}</div>`;
             } else if (sender === 'assistant-typing') {
                 wrapper.className = "flex max-w-[85%]";
                 wrapper.id = id;
-                wrapper.innerHTML = `<div class="custom-card border-dashed px-4 py-2 text-xs uppercase opacity-50 rounded-lg flex items-center gap-2"><span class="material-icons-round text-xs animate-spin">sync</span> ${text}</div>`;
+                wrapper.innerHTML = `<div class="custom-card border-dashed font-mono text-[10px] text-muted px-3 py-1.5 flex items-center gap-2"><svg class="w-3 h-3 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.78" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg> ${text}</div>`;
             } else {
-                wrapper.className = "flex justify-center w-full my-1 animate-enter";
-                wrapper.innerHTML = `<div class="custom-card px-4 py-1.5 rounded-lg text-xs uppercase tracking-wider opacity-60">${text}</div>`;
+                wrapper.className = "flex justify-center w-full my-1 animate-fade";
+                wrapper.innerHTML = `<div class="custom-card px-3 py-1 font-mono text-[9px] uppercase tracking-wider text-muted">${text}</div>`;
             }
             
             container.appendChild(wrapper);
