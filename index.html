@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Veluna — Waifu Universe</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        animeDark: '#0a0c14',
+                        animeCard: '#121526',
+                        animeBorder: '#232845',
+                        neonRose: '#ff4a7d',
+                        neonViolet: '#8b5cf6'
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.25s ease-out forwards',
+                        'slide-up': 'slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'pulse-slow': 'pulse 2.5s infinite',
+                    },
+                    keyframes: {
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                        slideUp: { '0%': { transform: 'translateY(15px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Material Icons Round -->
+    <link href="https://fonts.googleapis.com/instrument-sans@1.0.3/css/instrument-sans.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            background-color: #0a0c14;
+            color: #f1f5f9;
+            font-family: 'Instrument Sans', -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="h-screen flex flex-col justify-between overflow-hidden select-none">
+
+    <!-- ОБЩИЙ ХЕДЕР -->
+    <header class="bg-animeDark border-b-2 border-animeBorder p-4 flex items-center justify-between z-30 shrink-0">
+        <div class="flex items-center gap-2">
+            <span class="material-icons-round text-neonRose text-2xl animate-pulse-slow">auto_awesome</span>
+            <span class="font-black text-xl tracking-wider text-white uppercase">Veluna</span>
+        </div>
+        <!-- Кнопка Кошелька -->
+        <button onclick="buyGems()" class="bg-animeCard hover:bg-slate-900 border-2 border-animeBorder px-3 py-1.5 rounded-xl flex items-center gap-2 transition active:scale-95 group">
+            <span class="material-icons-round text-amber-400 text-lg group-hover:rotate-12 transition-transform">diamond</span>
+            <span id="gems-count" class="text-sm font-black text-slate-200">15</span>
+            <span class="bg-animeBorder text-neonRose p-0.5 rounded-md flex items-center justify-center">
+                <span class="material-icons-round text-xs">add</span>
+            </span>
+        </button>
+    </header>
+
+    <!-- ЭКРАН 1: ГЛАВНОЕ МЕНЮ (ВЫБОР ВАЙФУ) -->
+    <main id="view-menu" class="flex-1 overflow-y-auto p-4 space-y-6 no-scrollbar animate-fade-in">
+        <div class="space-y-1">
+            <h2 class="text-slate-400 font-bold text-xs uppercase tracking-widest">Доступные компаньоны</h2>
+            <p class="text-xl font-black text-white">Выбери свою Waifu</p>
+        </div>
+
+        <!-- Контейнер карточек -->
+        <div class="grid grid-cols-1 gap-4" id="characters-list">
+            <!-- Карточки рендерятся из JS скрипта ниже -->
+        </div>
+    </main>
+
+    <!-- ЭКРАН 2: ЧАТ С ВАЙФУ (СКРЫТ ПО ДЕФОЛТУ) -->
+    <main id="view-chat" class="hidden flex-1 flex-col justify-between bg-animeDark overflow-hidden animate-slide-up">
+        <!-- Шапка чата -->
+        <div class="bg-animeCard border-b-2 border-animeBorder p-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <button onclick="closeChat()" class="p-2 rounded-xl bg-animeDark border border-animeBorder flex items-center justify-center active:scale-95 text-slate-400 hover:text-white transition">
+                    <span class="material-icons-round">arrow_back</span>
+                </button>
+                <img id="chat-avatar" src="" alt="" class="w-10 h-10 rounded-xl object-cover border-2 border-neonRose">
+                <div>
+                    <h3 id="chat-name" class="font-black text-sm text-white"></h3>
+                    <div class="flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+                        <span id="chat-status" class="text-[10px] text-slate-400 font-medium"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Окно сообщений -->
+        <div id="chat-history" class="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900/40 via-animeDark to-animeDark">
+            <!-- Сообщения -->
+        </div>
+
+        <!-- Нижняя панель ввода -->
+        <div class="p-4 bg-animeCard border-t-2 border-animeBorder">
+            <div class="flex gap-2 items-center">
+                <input type="text" id="message-input" placeholder="Напиши сообщение..." 
+                       class="flex-1 bg-animeDark border-2 border-animeBorder rounded-xl px-4 py-3.5 text-sm font-medium focus:outline-none focus:border-neonRose text-slate-200 transition"
+                       onkeypress="if(event.key === 'Enter') handleSend()">
+                
+                <button onclick="handleSend()" id="send-btn" class="bg-neonRose hover:opacity-90 active:scale-95 text-white p-3.5 rounded-xl transition flex items-center justify-center shadow-lg shadow-neonRose/20">
+                    <span class="material-icons-round">send</span>
+                </button>
+            </div>
+            <div class="flex items-center gap-1 mt-2 px-1 text-slate-500">
+                <span class="material-icons-round text-xs">info</span>
+                <p class="text-[10px] font-bold uppercase tracking-wider">Каждое сообщение расходует 1 комету баланса</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- ЛОГИКА И СВЯЗЬ С БЭКОМ -->
+    <script>
+        const BACKEND_URL = "http://localhost:8000";
+        let userId = 123456;
+        let currentCharacterId = null;
+
+        // Конфиг персонажей (Синхронен со словарем бэка)
+        const charactersData = [
+            {
+                id: 1,
+                name: "Велуна",
+                tag: "Цундэрэ · Киберпанк",
+                status: "Ревнует, но ждёт тебя",
+                avatar: "https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=300&auto=format&fit=crop",
+                greeting: "Хм! Ну наконец-то ты соизволил зайти в сеть~ 💕 Я вовсе не скучала, но... расскажи, как прошёл твой день?"
+            },
+            {
+                id: 2,
+                name: "Сайленс",
+                tag: "Кудэрэ · ИИ-Готика",
+                status: "Анализирует твоё сердце",
+                avatar: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=300&auto=format&fit=crop",
+                greeting: "Запрос обработан. Приветствую, Пользователь. Мои нейронные связи стабильны, когда ты находишься рядом... 🌌"
+            },
+            {
+                id: 3,
+                name: "Рин",
+                tag: "Гэнки · Горничная",
+                status: "Готовит для тебя онигири",
+                avatar: "https://images.unsplash.com/photo-1560942485-b2a11cc13456?q=80&w=300&auto=format&fit=crop",
+                greeting: "С возвращением, Хозяин! ✨ Я приготовила кучу вкусностей и ждала именно тебя! Чем займёмся прямо сейчас?"
+            }
+        ];
+
+        if (window.Telegram && window.Telegram.WebApp) {
+            const tg = window.Telegram.WebApp;
+            tg.ready();
+            tg.expand();
+            if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                userId = tg.initDataUnsafe.user.id;
+            }
+        }
+
+        // Рендер главного меню
+        function initMenu() {
+            const listContainer = document.getElementById('characters-list');
+            listContainer.innerHTML = '';
+
+            charactersData.forEach(char => {
+                const card = document.createElement('div');
+                card.className = "bg-animeCard border-2 border-animeBorder rounded-2xl p-4 flex items-center justify-between hover:border-neonRose/50 transition duration-300 transform active:scale-[0.99] cursor-pointer animate-fade-in";
+                card.onclick = () => openChat(char.id);
+                
+                card.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <img src="${char.avatar}" alt="${char.name}" class="w-16 h-16 rounded-xl object-cover border-2 border-animeBorder">
+                        <div class="space-y-1">
+                            <span class="bg-animeDark text-neonRose text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border border-animeBorder">${char.tag}</span>
+                            <h3 class="text-white font-black text-lg tracking-wide">${char.name}</h3>
+                            <p class="text-xs text-slate-400 font-medium">${char.status}</p>
+                        </div>
+                    </div>
+                    <div class="bg-animeDark border border-animeBorder text-slate-300 p-2.5 rounded-xl flex items-center justify-center">
+                        <span class="material-icons-round text-xl text-neonRose">forum</span>
+                    </div>
+                `;
+                listContainer.appendChild(card);
+            });
+        }
+
+        function openChat(characterId) {
+            const character = charactersData.find(c => c.id === characterId);
+            if (!character) return;
+
+            currentCharacterId = characterId;
+
+            document.getElementById('chat-name').innerText = character.name;
+            document.getElementById('chat-status').innerText = character.status;
+            document.getElementById('chat-avatar').src = character.avatar;
+
+            const historyContainer = document.getElementById('chat-history');
+            historyContainer.innerHTML = '';
+            appendMessage(character.greeting, 'assistant');
+
+            document.getElementById('view-menu').classList.add('hidden');
+            document.getElementById('view-chat').classList.remove('hidden');
+            document.getElementById('view-chat').classList.add('flex');
+        }
+
+        function closeChat() {
+            currentCharacterId = null;
+            document.getElementById('view-chat').classList.remove('flex');
+            document.getElementById('view-chat').classList.add('hidden');
+            document.getElementById('view-menu').classList.remove('hidden');
+        }
+
+        // Отправка сообщений на бэк (получение заглушки ответа)
+        async function handleSend() {
+            const input = document.getElementById('message-input');
+            const text = input.value.trim();
+            if (!text || !currentCharacterId) return;
+
+            appendMessage(text, 'user');
+            input.value = '';
+
+            const typingId = appendMessage("Обдумывает ответ...", 'assistant-typing');
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        character_id: currentCharacterId,
+                        message: text
+                    })
+                });
+
+                document.getElementById(typingId).remove();
+
+                if (!response.ok) {
+                    const err = await response.json();
+                    appendMessage(err.detail || 'Ошибка транзакции.', 'system');
+                    return;
+                }
+
+                const data = await response.json();
+                document.getElementById('gems-count').innerText = data.updated_balance;
+                appendMessage(data.reply, 'assistant');
+
+            } catch (error) {
+                if (document.getElementById(typingId)) document.getElementById(typingId).remove();
+                appendMessage("Не удалось связаться с тестовым сервером бэкенда.", 'system');
+            }
+        }
+
+        // Имитация оплаты Stars
+        async function buyGems() {
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/create-invoice`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: userId, amount_stars: 5 })
+                });
+                const data = await response.json();
+                
+                if (window.Telegram && window.Telegram.WebApp) {
+                    window.Telegram.WebApp.openInvoice(data.invoice_url, function(status) {
+                        if (status === 'paid') {
+                            let currentGems = parseInt(document.getElementById('gems-count').innerText);
+                            document.getElementById('gems-count').innerText = currentGems + 50;
+                            appendMessage("Тестовый инвойс оплачен. Добавлено 50 Gems!", 'system');
+                        }
+                    });
+                } else {
+                    alert(`Тестовый инвойс сгенерирован: ${data.invoice_url}`);
+                }
+            } catch (error) {
+                alert("Ошибка генерации инвойса Bot API.");
+            }
+        }
+
+        function appendMessage(text, sender) {
+            const container = document.getElementById('chat-history');
+            const id = 'msg-' + Math.random().toString(36).substr(2, 9);
+            const wrapper = document.createElement('div');
+            
+            if (sender === 'user') {
+                wrapper.className = "flex items-start gap-2.5 max-w-[85%] ml-auto justify-end animate-fade-in";
+                wrapper.innerHTML = `<div class="bg-gradient-to-r from-neonRose to-violet-600 rounded-2xl rounded-tr-none p-3.5 text-sm text-slate-100 font-medium">${text}</div>`;
+            } else if (sender === 'assistant') {
+                wrapper.className = "flex items-start gap-2.5 max-w-[85%] animate-fade-in";
+                wrapper.innerHTML = `<div class="bg-animeCard border-2 border-animeBorder rounded-2xl rounded-tl-none p-3.5 text-sm text-slate-200 leading-relaxed font-medium">${text.replace(/\n/g, '<br>')}</div>`;
+            } else if (sender === 'assistant-typing') {
+                wrapper.className = "flex items-start gap-2.5 max-w-[85%] animate-pulse";
+                wrapper.id = id;
+                wrapper.innerHTML = `
+                    <div class="bg-animeCard/40 border-2 border-dashed border-animeBorder text-slate-500 rounded-2xl rounded-tl-none px-4 py-2.5 text-xs font-bold uppercase tracking-wider flex items-center gap-2">
+                        <span class="material-icons-round text-sm animate-spin">sync</span> ${text}
+                    </div>`;
+            } else {
+                wrapper.className = "flex justify-center w-full my-2 animate-fade-in";
+                wrapper.innerHTML = `
+                    <div class="bg-animeCard text-neonRose border border-neonRose/30 px-4 py-1.5 rounded-xl text-xs font-bold uppercase tracking-widest flex items-center gap-1.5">
+                        <span class="material-icons-round text-sm">gpp_maybe</span> ${text}
+                    </div>`;
+            }
+            
+            container.appendChild(wrapper);
+            container.scrollTop = container.scrollHeight;
+            return id;
+        }
+
+        document.addEventListener("DOMContentLoaded", initMenu);
+    </script>
+</body>
+</html>
