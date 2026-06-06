@@ -8,234 +8,237 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <style>
         :root {
-            --bg-app: #09090b;
-            --bg-card: #121214;
-            --border-flat: #27272a;
-            --text-main: #f4f4f5;
-            --text-muted: #71717a;
-            --accent: #ffffff;
-            --bg-input: #18181b;
-            --mono-font: 'Geist Mono', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            --bg-gradient: linear-gradient(180deg, #09090b 0%, #030303 100%);
+            --bg-card: #111113;
+            --bg-card-gradient: linear-gradient(145deg, #161619 0%, #0e0e10 100%);
+            --border-color: #222226;
+            --text-main: #ffffff;
+            --text-muted: #7e7e86;
+            --accent-pink: #ffb3c6;
+            --accent-pink-hover: #ffc2d1;
+            --btn-gradient: linear-gradient(90deg, #ffb3c6 0%, #ff85a2 100%);
         }
 
         body.light-theme {
-            --bg-app: #fafafa;
+            --bg-gradient: linear-gradient(180deg, #fcfcfc 0%, #f4f4f5 100%);
             --bg-card: #ffffff;
-            --border-flat: #e4e4e7;
+            --bg-card-gradient: linear-gradient(145deg, #ffffff 0%, #f9f9fb 100%);
+            --border-color: #e4e4e7;
             --text-main: #09090b;
-            --text-muted: #a1a1aa;
-            --accent: #000000;
-            --bg-input: #f4f4f5;
+            --text-muted: #8b8b93;
+            --accent-pink: #ff85a2;
+            --accent-pink-hover: #ff6b8b;
+            --btn-gradient: linear-gradient(90deg, #ff85a2 0%, #ff4d73 100%);
         }
 
         body {
-            background-color: var(--bg-app);
+            background: var(--bg-gradient);
             color: var(--text-main);
-            font-family: 'Geist', -apple-system, BlinkMacSystemFont, "San Francisco", "Segoe UI", Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Inter", sans-serif;
             -webkit-tap-highlight-color: transparent;
-            font-size: 0.95rem;
-            letter-spacing: -0.01em;
-            transition: background-color 0.2s ease, border-color 0.2s ease;
-        }
-
-        .font-mono {
-            font-family: var(--mono-font);
+            transition: background 0.3s ease;
         }
 
         .custom-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-flat);
+            background: var(--bg-card-gradient);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        body.light-theme .custom-card {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
         }
 
         .custom-border {
-            border-color: var(--border-flat);
+            border-color: var(--border-color);
         }
 
-        .custom-input {
-            background-color: var(--bg-input);
-            border: 1px solid var(--border-flat);
-            color: var(--text-main);
-        }
-
-        .text-muted {
-            color: var(--text-muted);
-        }
-
-        /* Унифицированные кнопки одинакового строгого размера */
-        .btn-ui {
-            height: 44px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid var(--border-flat);
-            background-color: var(--bg-card);
-            font-family: var(--mono-font);
-            font-size: 0.75rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            transition: all 0.15s ease;
+        /* Премиальная розовая акцентная кнопка с мягким благородным градиентом */
+        .btn-primary-pink {
+            height: 48px;
+            background: var(--btn-gradient);
+            color: #000000;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: -0.01em;
+            transition: opacity 0.2s ease, transform 0.1s ease;
         }
         
-        .btn-ui:active {
+        .btn-primary-pink:active {
             transform: scale(0.98);
-            background-color: var(--border-flat);
+            opacity: 0.9;
         }
+
+        /* Вторичная кнопка строго того же размера */
+        .btn-secondary-dark {
+            height: 48px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: background 0.2s ease, transform 0.1s ease;
+        }
+
+        .btn-secondary-dark:active {
+            transform: scale(0.98);
+            background: var(--border-color);
+        }
+
+        /* Инпуты */
+        .custom-input {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+        .custom-input:focus {
+            border-color: var(--accent-pink);
+        }
+
+        .text-pink { color: var(--accent-pink); }
+        .text-muted { color: var(--text-muted); }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        /* Строгая флэт-анимация перехода */
-        .animate-fade {
-            animation: flatFade 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
 
-        @keyframes flatFade {
-            0% { opacity: 0; transform: translateY(4px); }
+        .animate-smooth-fade {
+            animation: smoothFade 0.3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+        @keyframes smoothFade {
+            0% { opacity: 0; transform: translateY(6px); }
             100% { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body class="h-screen flex flex-col justify-between overflow-hidden select-none relative">
 
-    <div class="pointer-events-none absolute inset-0 z-40 opacity-[0.03] dark:opacity-[0.05] overflow-hidden">
-        <svg class="absolute top-10 right-10 w-24 h-24 text-current" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1">
-            <circle cx="50" cy="50" r="40" stroke-dasharray="2 4"/>
-            <line x1="50" y1="0" x2="50" y2="100"/>
-            <line x1="0" y1="50" x2="100" y2="50"/>
-        </svg>
-        <svg class="absolute bottom-4 left-4 w-32 h-12 text-current" viewBox="0 0 120 40" fill="none" stroke="currentColor" stroke-width="0.5">
-            <path d="M0,10 H120 M0,20 H120 M0,30 H120 M20,0 V40 M40,0 V40 M60,0 V40 M80,0 V40 M100,0 V40"/>
-        </svg>
-    </div>
-
-    <header class="custom-border border-b px-6 h-16 flex items-center justify-between shrink-0 bg-opacity-80 backdrop-blur-md z-30">
-        <div class="flex items-center gap-3 cursor-pointer" onclick="location.reload()">
-            <svg class="w-4 h-4 text-current" viewBox="0 0 16 16" fill="currentColor">
-                <rect x="1" y="1" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
-                <rect x="9" y="9" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
-                <path d="M1 15L15 1" stroke="currentColor" stroke-width="1.5"/>
-            </svg>
-            <span class="font-mono font-semibold text-sm tracking-widest uppercase">VELUNA</span>
+    <header class="custom-border border-b px-6 h-16 flex items-center justify-between shrink-0 bg-opacity-70 backdrop-blur-md z-30">
+        <div class="flex items-center gap-2.5 cursor-pointer" onclick="location.reload()">
+            <span class="material-icons-round text-pink text-2xl">favorite</span>
+            <span class="font-bold text-lg tracking-tight">Veluna <span class="text-pink font-light">Hub</span></span>
         </div>
         
-        <button onclick="toggleTheme()" class="w-9 h-9 border custom-border flex items-center justify-center transition active:bg-zinc-500/10">
-            <svg id="theme-icon-svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="5"/>
-                <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-            </svg>
+        <button onclick="toggleTheme()" class="w-10 h-10 rounded-full border custom-border flex items-center justify-center text-main active:scale-95 transition">
+            <span id="theme-icon" class="material-icons-round text-lg">dark_mode</span>
         </button>
     </header>
 
-    <section class="custom-border border-b px-6 h-10 flex items-center justify-between shrink-0 text-xs font-mono bg-zinc-500/[0.02]">
+    <section class="custom-border border-b px-6 h-12 flex items-center justify-between shrink-0 bg-black/20 text-xs font-medium">
         <div class="flex items-center gap-2">
-            <span class="text-muted uppercase tracking-wider text-[10px]">Запас:</span>
-            <div class="flex items-center gap-1">
-                <span id="gems-count" class="font-semibold">..</span>
-                <span class="text-muted">GEM</span>
-            </div>
+            <span class="material-icons-round text-pink text-sm">diamond</span>
+            <span class="text-muted">Баланс:</span>
+            <span id="gems-count" class="font-bold text-sm tracking-wide">..</span>
+            <span class="text-pink text-[10px] font-bold">GEM</span>
         </div>
-        <div class="h-3 w-px custom-border border-l"></div>
+        <div class="h-4 w-px custom-border border-l"></div>
         <div class="flex items-center gap-2">
-            <span class="text-muted uppercase tracking-wider text-[10px]">Лимит связи:</span>
-            <div class="flex items-center gap-1">
-                <span id="credits-count" class="font-semibold">..</span>
-                <span class="text-muted">CRED</span>
-            </div>
+            <span class="material-icons-round text-muted text-sm">bolt</span>
+            <span class="text-muted">Заряды связи:</span>
+            <span id="credits-count" class="font-bold text-sm tracking-wide">..</span>
+            <span class="text-muted text-[10px]">CRED</span>
         </div>
     </section>
 
-    <main id="view-menu" class="flex-1 overflow-y-auto p-6 space-y-6 no-scrollbar animate-fade">
+    <main id="view-menu" class="flex-1 overflow-y-auto p-5 space-y-6 no-scrollbar animate-smooth-fade">
         
-        <div class="custom-card p-6 space-y-4 relative overflow-hidden">
-            <svg class="absolute -right-4 -bottom-4 w-24 h-24 text-muted opacity-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-                <path d="M3 3h18v18H3zM21 3L3 21"/>
-            </svg>
-
-            <div class="flex items-center gap-2">
-                <span class="font-mono text-xs text-muted">[СИНХРОНИЗАЦИЯ]</span>
-                <h4 class="font-mono font-medium text-xs uppercase tracking-wider">Управление балансом</h4>
-            </div>
-            <p class="text-xs font-light leading-relaxed text-muted max-w-xl">
-                Прямая модификация кошелька заблокирована протоколом. Бесплатно: отправьте приглашение трем новым контактам для открытия сессии на 30 кредитов. Пополнение: используйте команду <span class="font-mono text-current underline">/gems</span> непосредственно внутри бота Telegram.
-            </p>
-            <div class="flex gap-3 pt-2">
-                <button onclick="shareInviteLink()" class="btn-ui flex-1 btn-action">
-                    <svg class="w-3 h-3 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v8M16 6l-4-4-4 4M12 2v13"/></svg>Пригласить
-                </button>
-                <button onclick="openExchangeModal()" class="btn-ui flex-1 btn-action">
-                    <svg class="w-3 h-3 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg>Обменять
-                </button>
-            </div>
-        </div>
-
-        <div class="space-y-1">
-            <span class="font-mono text-[10px] uppercase tracking-widest text-muted">Core Modules</span>
-            <h2 class="text-sm font-medium uppercase tracking-wider">Доступные терминалы ИИ</h2>
-        </div>
-
-        <div class="grid grid-cols-1 gap-3" id="characters-list">
-            <div class="text-center py-12 font-mono text-xs text-muted custom-card border-dashed">
-                Инициализация потоков данных...
-            </div>
-        </div>
-    </main>
-
-    <main id="view-chat" class="hidden flex-1 flex-col justify-between overflow-hidden animate-fade">
-        <div class="custom-border border-b px-6 h-16 flex items-center justify-between z-10 bg-opacity-80 backdrop-blur-md">
-            <div class="flex items-center gap-4">
-                <button onclick="closeChat()" class="w-9 h-9 border custom-border flex items-center justify-center active:bg-zinc-500/10">
-                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-                </button>
-                <img id="chat-avatar" src="" alt="" class="w-9 h-9 grayscale contrast-125 object-cover border custom-border">
+        <div class="custom-card rounded-2xl p-5 space-y-4">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-pink-500/10 flex items-center justify-center">
+                    <span class="material-icons-round text-pink text-lg">auto_awesome</span>
+                </div>
                 <div>
-                    <h3 id="chat-name" class="font-medium text-sm tracking-wide"></h3>
-                    <span id="chat-status" class="font-mono text-[9px] text-muted uppercase tracking-wider block mt-0.5"></span>
+                    <h4 class="font-semibold text-sm">Пополнение и рефералы</h4>
+                    <p class="text-[11px] text-muted">Увеличьте лимиты для беспрерывного общения</p>
                 </div>
+            </div>
+            
+            <p class="text-xs font-normal leading-relaxed text-muted">
+                Не хватает энергии? Приглашайте друзей и получайте бонусные <span class="text-white font-medium">CRED</span> мгновенно или пополните счет <span class="text-pink font-medium">GEM</span> через нашего официального бота.
+            </p>
+            
+            <div class="grid grid-cols-2 gap-3 pt-1">
+                <button onclick="shareInviteLink()" class="btn-secondary-dark rounded-xl flex items-center justify-center gap-2">
+                    <span class="material-icons-round text-sm">share</span> Пригласить
+                </button>
+                <button onclick="openExchangeModal()" class="btn-primary-pink rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-pink-500/10">
+                    <span class="material-icons-round text-sm">currency_exchange</span> Обменять
+                </button>
             </div>
         </div>
 
-        <div id="chat-history" class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar bg-transparent"></div>
-
-        <div class="p-4 custom-border border-t bg-opacity-50 backdrop-blur-sm">
-            <div class="flex gap-3 items-center">
-                <input type="text" id="message-input" placeholder="Введите текстовый запрос..." 
-                       class="flex-1 custom-input h-11 px-4 text-sm focus:outline-none focus:border-zinc-500 font-light transition">
-                
-                <button onclick="handleSend()" id="send-btn" class="w-11 h-11 border custom-border flex items-center justify-center active:bg-zinc-500/10 transition shrink-0">
-                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                </button>
-            </div>
-            <div class="flex items-center gap-2 mt-2 px-1 text-muted font-mono text-[9px] uppercase tracking-wider opacity-70">
-                <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                <span>Тарификация: 1 транзакция = 1 CRED</span>
+        <div class="space-y-3">
+            <h2 class="text-xs uppercase tracking-widest text-muted font-bold px-1">Ваши фаворитки</h2>
+            
+            <div class="grid grid-cols-1 gap-3" id="characters-list">
+                <div class="text-center py-12 text-muted custom-card rounded-2xl border-dashed flex flex-col items-center justify-center gap-2">
+                    <span class="material-icons-round animate-spin text-pink text-2xl">sync</span>
+                    <span class="text-xs font-medium">Синхронизация комнат общения...</span>
+                </div>
             </div>
         </div>
     </main>
 
-    <div id="exchange-modal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-6 backdrop-blur-xs">
-        <div class="custom-card w-full max-w-xs p-6 space-y-5 animate-fade">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2 font-mono text-xs">
-                    <span class="text-muted">[CONVERT]</span>
+    <main id="view-chat" class="hidden flex-1 flex-col justify-between overflow-hidden bg-black/10 animate-smooth-fade">
+        <div class="custom-border border-b px-5 h-16 flex items-center justify-between z-10 bg-zinc-900/40 backdrop-blur-md">
+            <div class="flex items-center gap-3.5 min-w-0">
+                <button onclick="closeChat()" class="w-10 h-10 rounded-xl border custom-border flex items-center justify-center text-muted active:text-white transition shrink-0">
+                    <span class="material-icons-round">arrow_back</span>
+                </button>
+                <img id="chat-avatar" src="" alt="" class="w-10 h-10 rounded-full object-cover border custom-border shrink-0">
+                <div class="min-w-0">
+                    <h3 id="chat-name" class="font-semibold text-sm tracking-wide truncate"></h3>
+                    <div class="flex items-center gap-1.5 mt-0.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span id="chat-status" class="text-[10px] text-muted uppercase tracking-wider block font-medium truncate"></span>
+                    </div>
                 </div>
-                <button onclick="closeExchangeModal()" class="text-muted hover:text-current transition">
-                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </div>
+        </div>
+
+        <div id="chat-history" class="flex-1 overflow-y-auto p-5 space-y-4 no-scrollbar"></div>
+
+        <div class="p-4 custom-border border-t bg-zinc-950/80 backdrop-blur-md">
+            <div class="flex gap-3 items-center max-w-4xl mx-auto">
+                <input type="text" id="message-input" placeholder="Напишите что-нибудь горячее..." 
+                       class="flex-1 custom-input h-12 rounded-xl px-4 text-sm focus:outline-none transition font-normal">
+                
+                <button onclick="handleSend()" id="send-btn" class="w-12 h-12 rounded-xl bg-pink-500 text-black flex items-center justify-center active:scale-95 transition shrink-0 shadow-lg shadow-pink-500/20">
+                    <span class="material-icons-round text-xl">send</span>
                 </button>
             </div>
-            <p class="text-xs font-light leading-relaxed text-muted">
-                Перерасчет баланса по фиксированному курсу: <span class="font-mono font-medium text-current">1 GEM = 2 CRED</span>. Операция необратима.
-            </p>
-            <div class="space-y-2">
-                <label class="font-mono text-[9px] text-muted uppercase tracking-widest block">Объем конверсии</label>
-                <input type="number" id="exchange-amount" value="1" min="1" class="w-full custom-input h-10 px-3 font-mono text-sm focus:outline-none focus:border-zinc-500">
+        </div>
+    </main>
+
+    <div id="exchange-modal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-6 backdrop-blur-sm">
+        <div class="custom-card w-full max-w-sm rounded-2xl p-6 space-y-5 animate-smooth-fade">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="material-icons-round text-pink">bolt</span>
+                    <h3 class="font-bold text-sm">Конвертировать кристаллы</h3>
+                </div>
+                <button onclick="closeExchangeModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-muted hover:text-white transition">
+                    <span class="material-icons-round">close</span>
+                </button>
             </div>
-            <button onclick="submitExchange()" class="btn-ui w-full">
-                Выполнить обмен
+            
+            <p class="text-xs leading-relaxed text-muted">
+                Обменяйте <span class="text-white font-medium">GEM</span> на <span class="text-pink font-medium">CRED</span> для продолжения диалога. Курс обмена фиксированный: <span class="text-white font-semibold">1 гем = 2 заряда</span>.
+            </p>
+            
+            <div class="space-y-2">
+                <label class="text-[10px] text-muted font-bold uppercase tracking-wider block">Сколько обменять?</label>
+                <input type="number" id="exchange-amount" value="5" min="1" class="w-full custom-input h-11 rounded-xl px-4 font-bold text-sm focus:outline-none">
+            </div>
+            
+            <button onclick="submitExchange()" class="btn-primary-pink w-full rounded-xl flex items-center justify-center gap-2">
+                <span class="material-icons-round text-sm">done</span> Подтвердить обмен
             </button>
         </div>
     </div>
@@ -246,10 +249,10 @@
         let currentCharacterId = null;
         let globalCharacters = [];
 
-        // Инициализация темы
+        // Тема оформления
         if (localStorage.getItem('theme') === 'light') {
             document.body.classList.add('light-theme');
-            updateThemeIcon(true);
+            document.getElementById('theme-icon').innerText = 'light_mode';
         }
 
         function toggleTheme() {
@@ -257,26 +260,10 @@
             body.classList.toggle('light-theme');
             const isLight = body.classList.contains('light-theme');
             localStorage.setItem('theme', isLight ? 'light' : 'dark');
-            updateThemeIcon(isLight);
+            document.getElementById('theme-icon').innerText = isLight ? 'light_mode' : 'dark_mode';
         }
 
-        function updateThemeIcon(isLight) {
-            const iconSvg = document.getElementById('theme-icon-svg');
-            if (isLight) {
-                // Луна для светлой темы (переключение на темную)
-                iconSvg.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
-            } else {
-                // Солнце для темной темы (переключение на светлую)
-                iconSvg.innerHTML = `
-                    <circle cx="12" cy="12" r="5"/>
-                    <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-                    <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-                `;
-            }
-        }
-
+        // Интеграция с Telegram WebApp
         if (window.Telegram && window.Telegram.WebApp) {
             const tg = window.Telegram.WebApp;
             tg.ready();
@@ -309,36 +296,36 @@
 
                 if (globalCharacters.length === 0) {
                     listContainer.innerHTML = `
-                        <div class="text-center py-10 font-mono text-xs text-muted custom-card border-dashed">
-                            Репозиторий пуст. Создайте персонажей в админ-панели.
+                        <div class="text-center py-10 text-muted custom-card rounded-2xl border-dashed text-xs">
+                            Список пуст. Добавьте персонажей через панель управления.
                         </div>`;
                     return;
                 }
 
                 globalCharacters.forEach(char => {
                     const card = document.createElement('div');
-                    card.className = "custom-card p-4 flex items-center justify-between hover:border-zinc-500/50 transition duration-150 cursor-pointer animate-fade";
+                    card.className = "custom-card rounded-2xl p-4 flex items-center justify-between hover:border-pink-500/30 transition duration-200 cursor-pointer animate-smooth-fade";
                     card.onclick = () => openChat(char.id);
                     
                     card.innerHTML = `
                         <div class="flex items-center gap-4 overflow-hidden">
-                            <img src="${char.avatar}" alt="${char.name}" class="w-12 h-12 grayscale contrast-125 object-cover border custom-border shrink-0">
-                            <div class="space-y-0.5 min-w-0">
-                                <span class="font-mono text-[9px] uppercase tracking-wider text-muted block truncate">${char.tag}</span>
-                                <h3 class="font-medium text-sm tracking-wide text-current">${char.name}</h3>
-                                <p class="text-xs text-muted truncate">${char.status}</p>
+                            <img src="${char.avatar}" alt="${char.name}" class="w-14 h-14 rounded-xl object-cover border custom-border shrink-0">
+                            <div class="space-y-1 min-w-0">
+                                <span class="text-[9px] font-bold uppercase tracking-wider text-pink block">${char.tag || 'HOT'}</span>
+                                <h3 class="font-bold text-sm tracking-tight text-current">${char.name}</h3>
+                                <p class="text-xs text-muted truncate font-light">${char.status}</p>
                             </div>
                         </div>
-                        <div class="p-2 text-muted shrink-0">
-                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        <div class="w-9 h-9 rounded-full bg-pink-500/5 flex items-center justify-center text-pink shrink-0">
+                            <span class="material-icons-round text-lg">chat</span>
                         </div>
                     `;
                     listContainer.appendChild(card);
                 });
             } catch (error) {
                 document.getElementById('characters-list').innerHTML = `
-                    <div class="text-center py-10 font-mono text-xs text-muted custom-card border-dashed border-red-900/30">
-                        Ошибка терминала: нет ответа от сервера среды.
+                    <div class="text-center py-10 text-muted custom-card rounded-2xl border-dashed border-red-500/20 text-xs">
+                        Ошибка подключения к медиа-серверу системы.
                     </div>`;
             }
         }
@@ -378,7 +365,7 @@
             appendMessage(text, 'user');
             input.value = '';
 
-            const typingId = appendMessage("Обработка нейросетью...", 'assistant-typing');
+            const typingId = appendMessage("Печатает...", 'assistant-typing');
 
             try {
                 const response = await fetch(`${BACKEND_URL}/api/chat`, {
@@ -395,7 +382,7 @@
 
                 if (!response.ok) {
                     const err = await response.json();
-                    appendMessage(err.detail || 'Критический сбой сигнального модуля.', 'system');
+                    appendMessage(err.detail || 'Ошибка доставки пакета данных.', 'system');
                     return;
                 }
 
@@ -405,7 +392,7 @@
 
             } catch (error) {
                 if (document.getElementById(typingId)) document.getElementById(typingId).remove();
-                appendMessage("Обрыв связи. Проверьте сетевое окружение.", 'system');
+                appendMessage("Нестабильный канал связи. Повторите попытку.", 'system');
             }
         }
 
@@ -426,7 +413,7 @@
 
                 if (!response.ok) {
                     const err = await response.json();
-                    alert(err.detail || "Недостаточно средств в GEM-секторе.");
+                    alert(err.detail || "Недостаточно ресурсов на балансе.");
                     return;
                 }
 
@@ -435,14 +422,14 @@
                 document.getElementById('credits-count').innerText = data.credits;
                 closeExchangeModal();
             } catch (error) {
-                alert("Транзакция отклонена шлюзом.");
+                alert("Ошибка обработки платежного шлюза.");
             }
         }
 
         function shareInviteLink() {
             const botUsername = "VelunaAIbot"; 
             const inviteLink = `https://t.me/${botUsername}?start=ref_${userId}`;
-            const shareUrl = `https://t.me/share/url?url={encodeURIComponent(inviteLink)}&text=${encodeURIComponent("Подключение к Veluna Hub.")}`;
+            const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(inviteLink)}&text=${encodeURIComponent("Присоединяйся к приватным диалогам в Veluna Hub! 🔥")}`;
             if (window.Telegram && window.Telegram.WebApp) {
                 window.Telegram.WebApp.openTelegramLink(shareUrl);
             } else {
@@ -456,18 +443,18 @@
             const wrapper = document.createElement('div');
             
             if (sender === 'user') {
-                wrapper.className = "flex max-w-[85%] ml-auto justify-end animate-fade";
-                wrapper.innerHTML = `<div class="custom-card px-4 py-2 text-sm">${text}</div>`;
+                wrapper.className = "flex max-w-[85%] ml-auto justify-end animate-smooth-fade";
+                wrapper.innerHTML = `<div class="bg-white text-black font-normal rounded-2xl rounded-tr-sm px-4 py-2.5 text-sm shadow-md">${text}</div>`;
             } else if (sender === 'assistant') {
-                wrapper.className = "flex max-w-[85%] animate-fade";
-                wrapper.innerHTML = `<div class="custom-card bg-zinc-500/[0.03] px-4 py-2.5 text-sm leading-relaxed">${text.replace(/\n/g, '<br>')}</div>`;
+                wrapper.className = "flex max-w-[85%] animate-smooth-fade";
+                wrapper.innerHTML = `<div class="custom-card rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm leading-relaxed">${text.replace(/\n/g, '<br>')}</div>`;
             } else if (sender === 'assistant-typing') {
                 wrapper.className = "flex max-w-[85%]";
                 wrapper.id = id;
-                wrapper.innerHTML = `<div class="custom-card border-dashed font-mono text-[10px] text-muted px-3 py-1.5 flex items-center gap-2"><svg class="w-3 h-3 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.78" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg> ${text}</div>`;
+                wrapper.innerHTML = `<div class="custom-card rounded-xl px-4 py-2 flex items-center gap-2 text-xs font-medium text-pink"><span class="material-icons-round text-sm animate-spin">sync</span>${text}</div>`;
             } else {
-                wrapper.className = "flex justify-center w-full my-1 animate-fade";
-                wrapper.innerHTML = `<div class="custom-card px-3 py-1 font-mono text-[9px] uppercase tracking-wider text-muted">${text}</div>`;
+                wrapper.className = "flex justify-center w-full my-1 animate-smooth-fade";
+                wrapper.innerHTML = `<div class="custom-card rounded-xl px-3 py-1 text-[10px] uppercase font-bold tracking-wider text-muted">${text}</div>`;
             }
             
             container.appendChild(wrapper);
