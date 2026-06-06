@@ -5,39 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Veluna</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Подключаем изящные рукописные кириллические шрифты для безупречного рендеринга -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Neucha&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        /* Импортируем изящный рукописный шрифт Vasek */
+        @font-face {
+            font-family: 'Vasek';
+            src: url('https://localfonts.eu/wp-content/uploads/fonts/vasek/Vasek.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
         :root {
-            --bg-app: #121214;
-            --bg-card: #1a1a1e;
-            --border-flat: #282830;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            --bg-app: #0e1013;
+            --bg-card: #14171a;
+            --border-flat: #22262b;
+            --text-main: #f1f5f9;
+            --text-muted: #8a99ad;
             --accent: #e2e8f0;
-            --bg-input: #1a1a1e;
+            --bg-input: #14171a;
         }
 
         body.light-theme {
-            --bg-app: #f8fafc;
+            --bg-app: #fcfcfc;
             --bg-card: #ffffff;
-            --border-flat: #e2e8f0;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --accent: #334155;
-            --bg-input: #ffffff;
+            --border-flat: #e5e9f0;
+            --text-main: #181c22;
+            --text-muted: #6b7c93;
+            --accent: #2e3440;
+            --bg-input: #fcfcfc;
         }
 
         body {
             background-color: var(--bg-app);
             color: var(--text-main);
-            font-family: 'Neucha', cursive;
+            /* Применяем Vasek, c резервом на Caveat и Comfortaa */
+            font-family: 'Vasek', 'Caveat', 'Comfortaa', cursive, sans-serif;
             -webkit-tap-highlight-color: transparent;
-            font-size: 1.15rem;
-            transition: background-color 0.2s ease, color 0.2s ease;
+            font-size: 1.25rem;
+            transition: background-color 0.25s ease, color 0.25s ease;
         }
 
         .custom-card {
@@ -58,138 +68,156 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* Анимация появления - срабатывает строго один раз */
+        /* Строгая, благородная анимация появления - без циклов */
         .animate-enter {
-            animation: flatEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: flatEnter 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         @keyframes flatEnter {
-            0% { opacity: 0; transform: translateY(8px); }
+            0% { opacity: 0; transform: translateY(6px); }
             100% { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body class="h-screen flex flex-col justify-between overflow-hidden select-none">
 
-    <header class="custom-border border-b p-5 flex items-center justify-between shrink-0 sticky top-0 z-30">
-        <div class="flex items-center gap-3 cursor-pointer" onclick="location.reload()">
-            <span class="material-icons-round text-xl">auto_awesome</span>
+    <!-- ШАПКА ПРИЛОЖЕНИЯ: Чистый Флэт-Минимализм -->
+    <header class="custom-border border-b px-5 py-4 flex items-center justify-between shrink-0 sticky top-0 z-30 bg-opacity-95 backdrop-blur-sm">
+        <div class="flex items-center gap-2.5 cursor-pointer" onclick="location.reload()">
+            <span class="material-icons-round text-lg">auto_awesome</span>
             <span class="font-bold text-2xl tracking-wide uppercase">Veluna</span>
         </div>
         
-        <div class="flex items-center gap-4">
-            <button onclick="toggleTheme()" class="custom-card p-2 rounded-xl flex items-center justify-center transition active:scale-95">
-                <span id="theme-icon" class="material-icons-round text-lg">light_mode</span>
-            </button>
-
-            <div class="custom-card px-4 py-2 rounded-xl flex items-center gap-2">
-                <span class="material-icons-round text-sm text-slate-400">chat_bubble</span>
-                <span id="credits-count" class="font-bold">..</span>
-            </div>
-            
-            <div class="custom-card px-4 py-2 rounded-xl flex items-center gap-2">
-                <span class="material-icons-round text-sm text-slate-400">diamond</span>
-                <span id="gems-count" class="font-bold">..</span>
-            </div>
-        </div>
+        <!-- Кнопка смены темы -->
+        <button onclick="toggleTheme()" class="custom-card p-2 rounded-lg flex items-center justify-center transition active:scale-95">
+            <span id="theme-icon" class="material-icons-round text-base">light_mode</span>
+        </button>
     </header>
 
-    <main id="view-menu" class="flex-1 overflow-y-auto p-5 space-y-6 no-scrollbar animate-enter">
+    <!-- ВЫДЕЛЕННАЯ ЛЕНТА БАЛАНСА (РЕШАЕТ ПРОБЛЕМУ НАЛОЖЕНИЯ КНОПОК) -->
+    <section class="custom-border border-b px-5 py-2.5 flex items-center justify-between shrink-0 text-sm opacity-90">
+        <div class="flex items-center gap-1.5">
+            <span class="opacity-60 text-xs">Запас:</span>
+            <div class="flex items-center gap-1">
+                <span id="gems-count" class="font-bold">..</span>
+                <span class="text-xs opacity-70">💎 Гем.</span>
+            </div>
+        </div>
+        <div class="h-3 w-px bg-slate-500 opacity-20"></div>
+        <div class="flex items-center gap-1.5">
+            <span class="opacity-60 text-xs">Лимит связи:</span>
+            <div class="flex items-center gap-1">
+                <span id="credits-count" class="font-bold">..</span>
+                <span class="text-xs opacity-70">✉️ Кред.</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ГЛАВНОЕ МЕНЮ (СПИСОК ВАЙФУ) -->
+    <main id="view-menu" class="flex-1 overflow-y-auto p-5 space-y-5 no-scrollbar animate-enter">
         
-        <div class="custom-card rounded-xl p-5 space-y-4">
+        <!-- Инфо-блок связи и рефералов -->
+        <div class="custom-card rounded-lg p-5 space-y-3.5">
             <div class="flex items-center gap-2">
-                <span class="material-icons-round text-lg">card_giftcard</span>
-                <h4 class="font-bold text-lg uppercase tracking-wide">Бесплатная связь</h4>
+                <span class="material-icons-round text-base">card_giftcard</span>
+                <h4 class="font-bold text-base uppercase tracking-wider">Пополнение Баланса</h4>
             </div>
-            <p class="text-sm leading-relaxed opacity-80">
-                Заряды связи заблокированы от ручного изменения. Вы можете получить их честным путем: пригласите 3 друзей через бота, чтобы активировать бонусные 30 кредитов, либо воспользуйтесь обменником ваших ресурсов ниже.
+            <p class="text-xs leading-relaxed opacity-75">
+                Баланс защищен от прямого редактирования. Вы можете бесплатно пригласить 3 друзей через нашего бота для начисления 30 кредитов, пополнить баланс через Telegram Stars командой <span class="font-bold underline">/gems</span> в чате бота, либо выполнить обмен ваших Гемов ниже.
             </p>
-            <div class="flex gap-3 pt-1">
-                <button onclick="shareInviteLink()" class="flex-1 custom-card hover:opacity-80 py-3 rounded-xl text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition active:scale-[0.98]">
-                    <span class="material-icons-round text-base">share</span> Пригласить соратников
+            <div class="flex gap-2.5 pt-1">
+                <button onclick="shareInviteLink()" class="flex-1 custom-card hover:bg-slate-50/5 hover:text-slate-200 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition active:scale-[0.98]">
+                    <span class="material-icons-round text-sm">share</span> Пригласить
                 </button>
-                <button onclick="openExchangeModal()" class="flex-1 custom-card hover:opacity-80 py-3 rounded-xl text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition active:scale-[0.98]">
-                    <span class="material-icons-round text-base">currency_exchange</span> Обменять Gems
+                <button onclick="openExchangeModal()" class="flex-1 custom-card hover:bg-slate-50/5 hover:text-slate-200 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition active:scale-[0.98]">
+                    <span class="material-icons-round text-sm">currency_exchange</span> Обменять Гемы
                 </button>
             </div>
         </div>
 
-        <div class="space-y-1">
-            <h2 class="text-xs font-bold uppercase tracking-widest opacity-60">Твой персональный выбор</h2>
-            <p class="text-2xl font-bold tracking-wide">Доступные собеседники ИИ</p>
+        <div class="space-y-0.5">
+            <h2 class="text-xs font-bold uppercase tracking-widest opacity-50">Выбор собеседника</h2>
+            <p class="text-xl font-bold tracking-wide">Доступные ИИ Компаньоны</p>
         </div>
 
+        <!-- Сетка карточек -->
         <div class="grid grid-cols-1 gap-4" id="characters-list">
-            <div class="text-center p-12 text-sm font-bold flex flex-col items-center justify-center gap-3 custom-card border-dashed rounded-xl">
+            <div class="text-center p-12 text-sm font-bold flex flex-col items-center justify-center gap-3 custom-card border-dashed rounded-lg">
                 Синхронизация данных...
             </div>
         </div>
     </main>
 
+    <!-- ЭКРАН СТРОГОГО МИНИМАЛИСТИЧНОГО ЧАТА -->
     <main id="view-chat" class="hidden flex-1 flex-col justify-between overflow-hidden animate-enter">
-        <div class="custom-border border-b p-4 flex items-center justify-between shadow-sm z-10">
-            <div class="flex items-center gap-4">
-                <button onclick="closeChat()" class="p-2 rounded-xl custom-card flex items-center justify-center active:scale-95">
-                    <span class="material-icons-round text-xl">arrow_back</span>
+        <!-- Шапка чата -->
+        <div class="custom-border border-b p-3.5 flex items-center justify-between z-10 bg-opacity-95 backdrop-blur-sm">
+            <div class="flex items-center gap-3">
+                <button onclick="closeChat()" class="p-2 rounded-lg custom-card flex items-center justify-center active:scale-95">
+                    <span class="material-icons-round text-base">arrow_back</span>
                 </button>
-                <img id="chat-avatar" src="" alt="" class="w-12 h-12 rounded-xl object-cover border custom-border">
+                <img id="chat-avatar" src="" alt="" class="w-10 h-10 rounded-lg object-cover border custom-border">
                 <div>
-                    <h3 id="chat-name" class="font-bold text-xl"></h3>
-                    <span id="chat-status" class="text-xs font-bold opacity-60 uppercase block"></span>
+                    <h3 id="chat-name" class="font-bold text-lg"></h3>
+                    <span id="chat-status" class="text-xs font-bold opacity-50 uppercase block"></span>
                 </div>
             </div>
         </div>
 
-        <div id="chat-history" class="flex-1 overflow-y-auto p-5 space-y-4 no-scrollbar"></div>
+        <!-- Область истории чата -->
+        <div id="chat-history" class="flex-1 overflow-y-auto p-5 space-y-4 no-scrollbar bg-transparent"></div>
 
-        <div class="p-5 custom-border border-t">
-            <div class="flex gap-3 items-center">
-                <input type="text" id="message-input" placeholder="Напиши сообщение..." 
-                       class="flex-1 custom-input rounded-xl px-4 py-3.5 text-base focus:outline-none focus:border-slate-400 transition"
+        <!-- Поле ввода сообщения -->
+        <div class="p-4 custom-border border-t">
+            <div class="flex gap-2.5 items-center">
+                <input type="text" id="message-input" placeholder="Напишите сообщение..." 
+                       class="flex-1 custom-input rounded-lg px-4 py-3 text-base focus:outline-none focus:border-slate-500 transition"
                        onkeypress="if(event.key === 'Enter') handleSend()">
                 
-                <button onclick="handleSend()" id="send-btn" class="custom-card hover:opacity-80 active:scale-95 p-3.5 rounded-xl transition flex items-center justify-center shrink-0">
-                    <span class="material-icons-round text-xl">send</span>
+                <button onclick="handleSend()" id="send-btn" class="custom-card hover:bg-slate-50/5 active:scale-95 p-3 rounded-lg transition flex items-center justify-center shrink-0">
+                    <span class="material-icons-round text-base">send</span>
                 </button>
             </div>
-            <div class="flex items-center gap-2 mt-3 px-1 opacity-50">
+            <div class="flex items-center gap-2 mt-2 px-1 opacity-40">
                 <span class="material-icons-round text-xs">info</span>
-                <p class="text-xs uppercase tracking-wider">Один ответ системы списывает 1 кредит связи</p>
+                <p class="text-[11px] uppercase tracking-wider">Каждое отправленное сообщение списывает 1 кредит связи</p>
             </div>
         </div>
     </main>
 
-    <div id="exchange-modal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-5">
-        <div class="custom-card rounded-xl w-full max-w-sm p-6 space-y-5">
+    <!-- ФЛЭТ-МОДАЛКА ОБМЕНА -->
+    <div id="exchange-modal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-5">
+        <div class="custom-card rounded-lg w-full max-w-sm p-6 space-y-4">
             <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <span class="material-icons-round">currency_exchange</span>
-                    <h3 class="font-bold text-lg uppercase tracking-wide">Конвертация</h3>
+                <div class="flex items-center gap-2">
+                    <span class="material-icons-round text-base">currency_exchange</span>
+                    <h3 class="font-bold text-base uppercase tracking-wider">Конвертировать</h3>
                 </div>
-                <button onclick="closeExchangeModal()" class="p-1 rounded-lg hover:opacity-70 transition">
-                    <span class="material-icons-round">close</span>
+                <button onclick="closeExchangeModal()" class="p-1 rounded-md hover:opacity-75 transition">
+                    <span class="material-icons-round text-base">close</span>
                 </button>
             </div>
-            <p class="text-sm leading-relaxed opacity-80">
-                Конвертируйте ваши премиальные ресурсы в доступные единицы текстовой связи по стабильному курсу: <span class="font-bold">1 Gem = 10 Кредитов</span>.
+            <p class="text-xs leading-relaxed opacity-80">
+                Конвертируйте ваши премиальные Гемы в Кредиты текстовой связи по фиксированному курсу: <span class="font-bold">1 Gem = 2 Кредита</span>.
             </p>
-            <div class="space-y-2">
-                <label class="text-xs font-bold opacity-60 uppercase tracking-widest block">Объем к списанию</label>
-                <input type="number" id="exchange-amount" value="1" min="1" class="w-full custom-input rounded-xl p-3 text-lg font-bold focus:outline-none">
+            <div class="space-y-1.5">
+                <label class="text-xs font-bold opacity-50 uppercase tracking-widest block">Количество к списанию</label>
+                <input type="number" id="exchange-amount" value="1" min="1" class="w-full custom-input rounded-lg p-2.5 text-base font-bold focus:outline-none">
             </div>
-            <button onclick="submitExchange()" class="w-full custom-card py-3.5 rounded-xl text-sm font-bold uppercase tracking-wider hover:opacity-80 transition">
-                Подтвердить операцию
+            <button onclick="submitExchange()" class="w-full custom-card py-3 rounded-lg text-xs font-bold uppercase tracking-wider hover:bg-slate-50/5 transition">
+                Подтвердить обмен
             </button>
         </div>
     </div>
 
+    <!-- КЛИЕНТСКИЙ СЦЕНАРИЙ -->
     <script>
         const BACKEND_URL = "https://sqwerxx-veluna.hf.space";
         let userId = 123456789; 
         let currentCharacterId = null;
         let globalCharacters = [];
 
-        // Инициализация темы при первой загрузке устройства
+        // Инициализация темы из локального хранилища
         if (localStorage.getItem('theme') === 'light') {
             document.body.classList.add('light-theme');
             document.getElementById('theme-icon').innerText = 'dark_mode';
@@ -233,30 +261,38 @@
                 const listContainer = document.getElementById('characters-list');
                 listContainer.innerHTML = '';
 
+                if (globalCharacters.length === 0) {
+                    listContainer.innerHTML = `
+                        <div class="text-center p-8 text-xs font-bold custom-card rounded-lg opacity-60">
+                            Персонажи отсутствуют. Создайте их в админ-панели бота.
+                        </div>`;
+                    return;
+                }
+
                 globalCharacters.forEach(char => {
                     const card = document.createElement('div');
-                    card.className = "custom-card rounded-xl p-4 flex items-center justify-between hover:opacity-90 transition duration-200 transform active:scale-[0.99] cursor-pointer animate-enter";
+                    card.className = "custom-card rounded-lg p-4 flex items-center justify-between hover:bg-slate-500/5 transition duration-200 transform active:scale-[0.99] cursor-pointer animate-enter";
                     card.onclick = () => openChat(char.id);
                     
                     card.innerHTML = `
                         <div class="flex items-center gap-4">
-                            <img src="${char.avatar}" alt="${char.name}" class="w-16 h-16 rounded-xl object-cover border custom-border shrink-0">
-                            <div class="space-y-1">
-                                <span class="text-xs uppercase tracking-wider opacity-60 font-bold">${char.tag}</span>
-                                <h3 class="font-bold text-lg tracking-wide">${char.name}</h3>
-                                <p class="text-xs opacity-80">${char.status}</p>
+                            <img src="${char.avatar}" alt="${char.name}" class="w-14 h-14 rounded-lg object-cover border custom-border shrink-0">
+                            <div class="space-y-0.5">
+                                <span class="text-[10px] uppercase tracking-wider opacity-50 font-bold">${char.tag}</span>
+                                <h3 class="font-bold text-base tracking-wide">${char.name}</h3>
+                                <p class="text-xs opacity-75">${char.status}</p>
                             </div>
                         </div>
-                        <div class="p-3 rounded-xl flex items-center justify-center opacity-60">
-                            <span class="material-icons-round text-xl">forum</span>
+                        <div class="p-2.5 rounded-lg flex items-center justify-center opacity-60">
+                            <span class="material-icons-round text-base">forum</span>
                         </div>
                     `;
                     listContainer.appendChild(card);
                 });
             } catch (error) {
                 document.getElementById('characters-list').innerHTML = `
-                    <div class="text-center p-8 text-sm font-bold custom-card rounded-xl">
-                        Сбой сетевого подключения к вычислительному модулю.
+                    <div class="text-center p-8 text-xs font-bold custom-card rounded-lg border-dashed">
+                        Ошибка подключения к бэкенд серверу.
                     </div>`;
             }
         }
@@ -296,7 +332,7 @@
             appendMessage(text, 'user');
             input.value = '';
 
-            const typingId = appendMessage("Генерация ответа...", 'assistant-typing');
+            const typingId = appendMessage("Генерация мысли...", 'assistant-typing');
 
             try {
                 const response = await fetch(`${BACKEND_URL}/api/chat`, {
@@ -313,7 +349,7 @@
 
                 if (!response.ok) {
                     const err = await response.json();
-                    appendMessage(err.detail || 'Ошибка нейро-модуля.', 'system');
+                    appendMessage(err.detail || 'Критический сбой нейро-модуля.', 'system');
                     return;
                 }
 
@@ -323,7 +359,7 @@
 
             } catch (error) {
                 if (document.getElementById(typingId)) document.getElementById(typingId).remove();
-                appendMessage("Не удалось получить ответ. Сервер разорвал соединение.", 'system');
+                appendMessage("Не удалось получить ответ. Соединение разорвано.", 'system');
             }
         }
 
@@ -344,7 +380,7 @@
 
                 if (!response.ok) {
                     const err = await response.json();
-                    alert(err.detail || "Недостаточно ресурсов на балансе.");
+                    alert(err.detail || "Недостаточно Гемов на вашем балансе.");
                     return;
                 }
 
@@ -353,14 +389,14 @@
                 document.getElementById('credits-count').innerText = data.credits;
                 closeExchangeModal();
             } catch (error) {
-                alert("Ошибка проведения операции.");
+                alert("Ошибка во время отправки операции.");
             }
         }
 
         function shareInviteLink() {
             const botUsername = "VelunaAIbot"; 
             const inviteLink = `https://t.me/${botUsername}?start=ref_${userId}`;
-            const shareUrl = `https://t.me/share/url?url={encodeURIComponent(inviteLink)}&text={encodeURIComponent("Заходи в Veluna — пообщаемся!")}`;
+            const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(inviteLink)}&text=${encodeURIComponent("Заходи в Veluna — пообщаемся!")}`;
             if (window.Telegram && window.Telegram.WebApp) {
                 window.Telegram.WebApp.openTelegramLink(shareUrl);
             } else {
@@ -375,17 +411,17 @@
             
             if (sender === 'user') {
                 wrapper.className = "flex max-w-[85%] ml-auto justify-end animate-enter";
-                wrapper.innerHTML = `<div class="custom-card rounded-xl rounded-tr-none px-4 py-2.5 text-base opacity-90">${text}</div>`;
+                wrapper.innerHTML = `<div class="custom-card rounded-lg rounded-tr-none px-4 py-2.5 text-base opacity-90">${text}</div>`;
             } else if (sender === 'assistant') {
                 wrapper.className = "flex max-w-[85%] animate-enter";
-                wrapper.innerHTML = `<div class="custom-card rounded-xl rounded-tl-none px-4 py-2.5 text-base leading-relaxed">${text.replace(/\n/g, '<br>')}</div>`;
+                wrapper.innerHTML = `<div class="custom-card rounded-lg rounded-tl-none px-4 py-2.5 text-base leading-relaxed">${text.replace(/\n/g, '<br>')}</div>`;
             } else if (sender === 'assistant-typing') {
                 wrapper.className = "flex max-w-[85%]";
                 wrapper.id = id;
-                wrapper.innerHTML = `<div class="custom-card border-dashed px-4 py-2 text-sm uppercase opacity-60 rounded-xl">${text}</div>`;
+                wrapper.innerHTML = `<div class="custom-card border-dashed px-4 py-2 text-xs uppercase opacity-50 rounded-lg flex items-center gap-2"><span class="material-icons-round text-xs animate-spin">sync</span> ${text}</div>`;
             } else {
                 wrapper.className = "flex justify-center w-full my-1 animate-enter";
-                wrapper.innerHTML = `<div class="custom-card px-4 py-1.5 rounded-xl text-xs uppercase tracking-wider opacity-70">${text}</div>`;
+                wrapper.innerHTML = `<div class="custom-card px-4 py-1.5 rounded-lg text-xs uppercase tracking-wider opacity-60">${text}</div>`;
             }
             
             container.appendChild(wrapper);
