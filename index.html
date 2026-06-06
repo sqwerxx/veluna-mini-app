@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Veluna — Premium Waifu Client</title>
+    <title>Veluna</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -163,7 +163,7 @@
 
     <script>
         const BACKEND_URL = "https://sqwerxx-veluna.hf.space";
-        let userId = 123456789; // Тестовый ID, если открыто вне ТГ
+        let userId = 123456789; // Тестовый ID, если открыто вне тг
         let currentCharacterId = null;
         let globalCharacters = [];
 
@@ -361,9 +361,9 @@
 
         // Кнопка шаринга инвайт ссылки
         function shareInviteLink() {
-            const botUsername = "YOUR_BOT_USERNAME"; // Укажи юзернейм своего бота без знака @
+            const botUsername = "VelunaAIbot"; // Укажи юзернейм своего бота без знака @
             const inviteLink = `https://t.me/${botUsername}?start=ref_${userId}`;
-            const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(inviteLink)}&text=${encodeURIComponent("Заходи в Veluna Hub — пообщаемся с лучшими AI Waifu!")}`;
+            const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(inviteLink)}&text=${encodeURIComponent("Заходи в Veluna — пообщаемся!")}`;
             
             if (window.Telegram && window.Telegram.WebApp) {
                 window.Telegram.WebApp.openTelegramLink(shareUrl);
