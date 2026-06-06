@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Veluna — Waifu Universe</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Veluna — Premium Waifu Client</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -30,10 +29,8 @@
             }
         }
     </script>
-    <!-- Google Material Icons Round -->
     <link href="https://fonts.googleapis.com/instrument-sans@1.0.3/css/instrument-sans.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
-    <!-- Telegram WebApp SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
@@ -48,38 +45,62 @@
 </head>
 <body class="h-screen flex flex-col justify-between overflow-hidden select-none">
 
-    <!-- ОБЩИЙ ХЕДЕР -->
     <header class="bg-animeDark border-b-2 border-animeBorder p-4 flex items-center justify-between z-30 shrink-0">
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2" onclick="location.reload()">
             <span class="material-icons-round text-neonRose text-2xl animate-pulse-slow">auto_awesome</span>
             <span class="font-black text-xl tracking-wider text-white uppercase">Veluna</span>
         </div>
-        <!-- Кнопка Кошелька -->
-        <button onclick="buyGems()" class="bg-animeCard hover:bg-slate-900 border-2 border-animeBorder px-3 py-1.5 rounded-xl flex items-center gap-2 transition active:scale-95 group">
-            <span class="material-icons-round text-amber-400 text-lg group-hover:rotate-12 transition-transform">diamond</span>
-            <span id="gems-count" class="text-sm font-black text-slate-200">15</span>
-            <span class="bg-animeBorder text-neonRose p-0.5 rounded-md flex items-center justify-center">
-                <span class="material-icons-round text-xs">add</span>
-            </span>
-        </button>
+        
+        <div class="flex items-center gap-2">
+            <div class="bg-animeCard border-2 border-animeBorder px-2.5 py-1.5 rounded-xl flex items-center gap-1.5">
+                <span class="material-icons-round text-neonViolet text-base">chat_bubble</span>
+                <span id="credits-count" class="text-xs font-black text-slate-200">..</span>
+            </div>
+            
+            <div class="bg-animeCard border-2 border-animeBorder pl-2.5 pr-1 py-1 rounded-xl flex items-center gap-1.5">
+                <span class="material-icons-round text-amber-400 text-base">diamond</span>
+                <span id="gems-count" class="text-xs font-black text-slate-200">..</span>
+                <button onclick="buyGems()" class="bg-animeBorder hover:bg-slate-800 text-neonRose p-1 rounded-md flex items-center justify-center ml-1 transition active:scale-95">
+                    <span class="material-icons-round text-xs">add</span>
+                </button>
+            </div>
+        </div>
     </header>
 
-    <!-- ЭКРАН 1: ГЛАВНОЕ МЕНЮ (ВЫБОР ВАЙФУ) -->
-    <main id="view-menu" class="flex-1 overflow-y-auto p-4 space-y-6 no-scrollbar animate-fade-in">
-        <div class="space-y-1">
-            <h2 class="text-slate-400 font-bold text-xs uppercase tracking-widest">Доступные компаньоны</h2>
-            <p class="text-xl font-black text-white">Выбери свою Waifu</p>
+    <main id="view-menu" class="flex-1 overflow-y-auto p-4 space-y-5 no-scrollbar animate-fade-in">
+        
+        <div class="bg-gradient-to-r from-animeCard to-slate-900 border-2 border-animeBorder rounded-2xl p-4 space-y-3">
+            <div class="flex items-center gap-2">
+                <span class="material-icons-round text-neonRose">card_giftcard</span>
+                <h4 class="text-xs font-black text-white uppercase tracking-wider">Бесплатные кредиты чата</h4>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+                Закончились заряды для общения? Пригласи друзей! Каждые <span class="text-white font-bold">3 друга</span>, запустившие бота, принесут тебе <span class="text-neonViolet font-bold">30 кредитов</span>.
+            </p>
+            <div class="flex gap-2">
+                <button onclick="shareInviteLink()" class="flex-1 bg-animeDark hover:bg-slate-950 border border-animeBorder text-slate-200 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition active:scale-95">
+                    <span class="material-icons-round text-sm text-neonRose">share</span> Пригласить друзей
+                </button>
+                <button onclick="openExchangeModal()" class="bg-neonRose hover:opacity-90 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition active:scale-95">
+                    <span class="material-icons-round text-sm">currency_exchange</span> Обменять Gems
+                </button>
+            </div>
         </div>
 
-        <!-- Контейнер карточек -->
+        <div class="space-y-1 py-1">
+            <h2 class="text-slate-500 font-bold text-[10px] uppercase tracking-widest">Твой персональный выбор</h2>
+            <p class="text-lg font-black text-white tracking-wide">Доступные AI Waifu</p>
+        </div>
+
         <div class="grid grid-cols-1 gap-4" id="characters-list">
-            <!-- Карточки рендерятся из JS скрипта ниже -->
+            <div class="text-center p-8 text-slate-500 text-xs flex flex-col items-center gap-2">
+                <span class="material-icons-round animate-spin text-xl text-neonRose">sync</span>
+                Синхронизация с базой данных...
+            </div>
         </div>
     </main>
 
-    <!-- ЭКРАН 2: ЧАТ С ВАЙФУ (СКРЫТ ПО ДЕФОЛТУ) -->
     <main id="view-chat" class="hidden flex-1 flex-col justify-between bg-animeDark overflow-hidden animate-slide-up">
-        <!-- Шапка чата -->
         <div class="bg-animeCard border-b-2 border-animeBorder p-3 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <button onclick="closeChat()" class="p-2 rounded-xl bg-animeDark border border-animeBorder flex items-center justify-center active:scale-95 text-slate-400 hover:text-white transition">
@@ -87,7 +108,7 @@
                 </button>
                 <img id="chat-avatar" src="" alt="" class="w-10 h-10 rounded-xl object-cover border-2 border-neonRose">
                 <div>
-                    <h3 id="chat-name" class="font-black text-sm text-white"></h3>
+                    <h3 id="chat-name" class="font-black text-sm text-white tracking-wide"></h3>
                     <div class="flex items-center gap-1">
                         <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
                         <span id="chat-status" class="text-[10px] text-slate-400 font-medium"></span>
@@ -96,12 +117,9 @@
             </div>
         </div>
 
-        <!-- Окно сообщений -->
-        <div id="chat-history" class="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900/40 via-animeDark to-animeDark">
-            <!-- Сообщения -->
-        </div>
+        <div id="chat-history" class="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900/30 via-animeDark to-animeDark">
+            </div>
 
-        <!-- Нижняя панель ввода -->
         <div class="p-4 bg-animeCard border-t-2 border-animeBorder">
             <div class="flex gap-2 items-center">
                 <input type="text" id="message-input" placeholder="Напиши сообщение..." 
@@ -114,45 +132,42 @@
             </div>
             <div class="flex items-center gap-1 mt-2 px-1 text-slate-500">
                 <span class="material-icons-round text-xs">info</span>
-                <p class="text-[10px] font-bold uppercase tracking-wider">Каждое сообщение расходует 1 комету баланса</p>
+                <p class="text-[10px] font-bold uppercase tracking-wider">Один ответ списывает 1 кредит связи</p>
             </div>
         </div>
     </main>
 
-    <!-- ЛОГИКА И СВЯЗЬ С БЭКОМ -->
+    <div id="exchange-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+        <div class="bg-animeCard border-2 border-animeBorder rounded-2xl w-full max-w-sm p-5 space-y-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="material-icons-round text-amber-400">currency_exchange</span>
+                    <h3 class="font-black text-sm uppercase tracking-wider text-white">Обменник валюты</h3>
+                </div>
+                <button onclick="closeExchangeModal()" class="text-slate-400 hover:text-white">
+                    <span class="material-icons-round">close</span>
+                </button>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+                Вы можете обменять Ваши премиальные <span class="text-amber-400 font-bold">Gems</span> на <span class="text-neonViolet font-bold">Кредиты чата</span> по курсу <span class="text-white font-bold">1 Gem = 10 Кредитов</span>.
+            </p>
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Сколько Gems обменять?</label>
+                <input type="number" id="exchange-amount" value="1" min="1" class="w-full bg-animeDark border-2 border-animeBorder rounded-xl p-3 text-sm font-bold text-white focus:outline-none focus:border-neonRose">
+            </div>
+            <button onclick="submitExchange()" class="w-full bg-gradient-to-r from-neonRose to-neonViolet text-white py-3 rounded-xl text-xs font-black uppercase tracking-wider transition active:scale-[0.98]">
+                Подтвердить транзакцию обмена
+            </button>
+        </div>
+    </div>
+
     <script>
         const BACKEND_URL = "http://localhost:8000";
-        let userId = 123456;
+        let userId = 123456789; // Тестовый ID, если открыто вне ТГ
         let currentCharacterId = null;
+        let globalCharacters = [];
 
-        // Конфиг персонажей (Синхронен со словарем бэка)
-        const charactersData = [
-            {
-                id: 1,
-                name: "Велуна",
-                tag: "Цундэрэ · Киберпанк",
-                status: "Ревнует, но ждёт тебя",
-                avatar: "https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=300&auto=format&fit=crop",
-                greeting: "Хм! Ну наконец-то ты соизволил зайти в сеть~ 💕 Я вовсе не скучала, но... расскажи, как прошёл твой день?"
-            },
-            {
-                id: 2,
-                name: "Сайленс",
-                tag: "Кудэрэ · ИИ-Готика",
-                status: "Анализирует твоё сердце",
-                avatar: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=300&auto=format&fit=crop",
-                greeting: "Запрос обработан. Приветствую, Пользователь. Мои нейронные связи стабильны, когда ты находишься рядом... 🌌"
-            },
-            {
-                id: 3,
-                name: "Рин",
-                tag: "Гэнки · Горничная",
-                status: "Готовит для тебя онигири",
-                avatar: "https://images.unsplash.com/photo-1560942485-b2a11cc13456?q=80&w=300&auto=format&fit=crop",
-                greeting: "С возвращением, Хозяин! ✨ Я приготовила кучу вкусностей и ждала именно тебя! Чем займёмся прямо сейчас?"
-            }
-        ];
-
+        // Инициализация Telegram WebApp
         if (window.Telegram && window.Telegram.WebApp) {
             const tg = window.Telegram.WebApp;
             tg.ready();
@@ -162,35 +177,62 @@
             }
         }
 
-        // Рендер главного меню
-        function initMenu() {
-            const listContainer = document.getElementById('characters-list');
-            listContainer.innerHTML = '';
-
-            charactersData.forEach(char => {
-                const card = document.createElement('div');
-                card.className = "bg-animeCard border-2 border-animeBorder rounded-2xl p-4 flex items-center justify-between hover:border-neonRose/50 transition duration-300 transform active:scale-[0.99] cursor-pointer animate-fade-in";
-                card.onclick = () => openChat(char.id);
+        // Загрузка профиля (балансов) с сервера
+        async function loadProfile() {
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/profile/${userId}`);
+                if (!response.ok) return;
+                const data = await response.json();
                 
-                card.innerHTML = `
-                    <div class="flex items-center gap-4">
-                        <img src="${char.avatar}" alt="${char.name}" class="w-16 h-16 rounded-xl object-cover border-2 border-animeBorder">
-                        <div class="space-y-1">
-                            <span class="bg-animeDark text-neonRose text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border border-animeBorder">${char.tag}</span>
-                            <h3 class="text-white font-black text-lg tracking-wide">${char.name}</h3>
-                            <p class="text-xs text-slate-400 font-medium">${char.status}</p>
-                        </div>
-                    </div>
-                    <div class="bg-animeDark border border-animeBorder text-slate-300 p-2.5 rounded-xl flex items-center justify-center">
-                        <span class="material-icons-round text-xl text-neonRose">forum</span>
-                    </div>
-                `;
-                listContainer.appendChild(card);
-            });
+                document.getElementById('gems-count').innerText = data.gems;
+                document.getElementById('credits-count').innerText = data.credits;
+            } catch (error) {
+                console.error("Profile load failed:", error);
+            }
         }
 
+        // Динамическая загрузка персонажей из бэка
+        async function loadCharacters() {
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/characters`);
+                if (!response.ok) return;
+                globalCharacters = await response.json();
+                
+                const listContainer = document.getElementById('characters-list');
+                listContainer.innerHTML = '';
+
+                globalCharacters.forEach(char => {
+                    const card = document.createElement('div');
+                    card.className = "bg-animeCard border-2 border-animeBorder rounded-2xl p-4 flex items-center justify-between hover:border-neonRose/50 transition duration-300 transform active:scale-[0.99] cursor-pointer animate-fade-in";
+                    card.onclick = () => openChat(char.id);
+                    
+                    card.innerHTML = `
+                        <div class="flex items-center gap-4">
+                            <img src="${char.avatar}" alt="${char.name}" class="w-16 h-16 rounded-xl object-cover border-2 border-animeBorder">
+                            <div class="space-y-1">
+                                <span class="bg-animeDark text-neonRose text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border border-animeBorder">${char.tag}</span>
+                                <h3 class="text-white font-black text-lg tracking-wide">${char.name}</h3>
+                                <p class="text-xs text-slate-400 font-medium">${char.status}</p>
+                            </div>
+                        </div>
+                        <div class="bg-animeDark border border-animeBorder text-slate-300 p-2.5 rounded-xl flex items-center justify-center">
+                            <span class="material-icons-round text-xl text-neonRose">forum</span>
+                        </div>
+                    `;
+                    listContainer.appendChild(card);
+                });
+            } catch (error) {
+                document.getElementById('characters-list').innerHTML = `
+                    <div class="text-center p-8 text-neonRose text-xs flex flex-col items-center gap-1">
+                        <span class="material-icons-round text-xl">gpp_maybe</span>
+                        Ошибка соединения с бэкенд сервером!
+                    </div>`;
+            }
+        }
+
+        // Переключение на экран чата
         function openChat(characterId) {
-            const character = charactersData.find(c => c.id === characterId);
+            const character = globalCharacters.find(c => c.id === characterId);
             if (!character) return;
 
             currentCharacterId = characterId;
@@ -201,6 +243,8 @@
 
             const historyContainer = document.getElementById('chat-history');
             historyContainer.innerHTML = '';
+            
+            // Первое приветствие от лица персонажа (смайлики разрешены только тут)
             appendMessage(character.greeting, 'assistant');
 
             document.getElementById('view-menu').classList.add('hidden');
@@ -213,9 +257,10 @@
             document.getElementById('view-chat').classList.remove('flex');
             document.getElementById('view-chat').classList.add('hidden');
             document.getElementById('view-menu').classList.remove('hidden');
+            loadProfile(); // Обновляем балансы при возврате в меню
         }
 
-        // Отправка сообщений на бэк (получение заглушки ответа)
+        // Отправка сообщений в чат эндпоинт
         async function handleSend() {
             const input = document.getElementById('message-input');
             const text = input.value.trim();
@@ -224,7 +269,7 @@
             appendMessage(text, 'user');
             input.value = '';
 
-            const typingId = appendMessage("Обдумывает ответ...", 'assistant-typing');
+            const typingId = appendMessage("Генерация ответа...", 'assistant-typing');
 
             try {
                 const response = await fetch(`${BACKEND_URL}/api/chat`, {
@@ -241,21 +286,21 @@
 
                 if (!response.ok) {
                     const err = await response.json();
-                    appendMessage(err.detail || 'Ошибка транзакции.', 'system');
+                    appendMessage(err.detail || 'Ошибка обработки данных.', 'system');
                     return;
                 }
 
                 const data = await response.json();
-                document.getElementById('gems-count').innerText = data.updated_balance;
+                document.getElementById('credits-count').innerText = data.updated_credits;
                 appendMessage(data.reply, 'assistant');
 
             } catch (error) {
                 if (document.getElementById(typingId)) document.getElementById(typingId).remove();
-                appendMessage("Не удалось связаться с тестовым сервером бэкенда.", 'system');
+                appendMessage("Не удалось отправить запрос. Сервер недоступен.", 'system');
             }
         }
 
-        // Имитация оплаты Stars
+        // Вызов инвойса Telegram Stars (5 звёзд за пак)
         async function buyGems() {
             try {
                 const response = await fetch(`${BACKEND_URL}/api/create-invoice`, {
@@ -268,19 +313,66 @@
                 if (window.Telegram && window.Telegram.WebApp) {
                     window.Telegram.WebApp.openInvoice(data.invoice_url, function(status) {
                         if (status === 'paid') {
-                            let currentGems = parseInt(document.getElementById('gems-count').innerText);
-                            document.getElementById('gems-count').innerText = currentGems + 50;
-                            appendMessage("Тестовый инвойс оплачен. Добавлено 50 Gems!", 'system');
+                            loadProfile();
+                            appendMessage("Пополнение через Telegram Stars успешно обработано!", 'system');
                         }
                     });
                 } else {
-                    alert(`Тестовый инвойс сгенерирован: ${data.invoice_url}`);
+                    alert(`Тестовая ссылка инвойса: ${data.invoice_url}`);
                 }
             } catch (error) {
-                alert("Ошибка генерации инвойса Bot API.");
+                alert("Ошибка связи с Bot API для создания платежа.");
             }
         }
 
+        // Модалка обмена
+        function openExchangeModal() { document.getElementById('exchange-modal').classList.remove('hidden'); }
+        function closeExchangeModal() { document.getElementById('exchange-modal').classList.add('hidden'); }
+
+        // Запрос на обмен гемов на кредиты
+        async function submitExchange() {
+            const amountInput = document.getElementById('exchange-amount');
+            const gemsToExchange = parseInt(amountInput.value);
+            
+            if (isNaN(gemsToExchange) || gemsToExchange <= 0) return;
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/exchange`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: userId, gems_to_exchange: gemsToExchange })
+                });
+
+                if (!response.ok) {
+                    const err = await response.json();
+                    alert(err.detail || "Недостаточно ресурсов.");
+                    return;
+                }
+
+                const data = await response.json();
+                document.getElementById('gems-count').innerText = data.gems;
+                document.getElementById('credits-count').innerText = data.credits;
+                closeExchangeModal();
+                
+            } catch (error) {
+                alert("Ошибка отправки транзакции на обмен.");
+            }
+        }
+
+        // Кнопка шаринга инвайт ссылки
+        function shareInviteLink() {
+            const botUsername = "YOUR_BOT_USERNAME"; // Укажи юзернейм своего бота без знака @
+            const inviteLink = `https://t.me/${botUsername}?start=ref_${userId}`;
+            const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(inviteLink)}&text=${encodeURIComponent("Заходи в Veluna Hub — пообщаемся с лучшими AI Waifu!")}`;
+            
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.openTelegramLink(shareUrl);
+            } else {
+                window.open(shareUrl, '_blank');
+            }
+        }
+
+        // Добавление текстовых блоков в историю чата
         function appendMessage(text, sender) {
             const container = document.getElementById('chat-history');
             const id = 'msg-' + Math.random().toString(36).substr(2, 9);
@@ -312,7 +404,11 @@
             return id;
         }
 
-        document.addEventListener("DOMContentLoaded", initMenu);
+        // Точка старта приложения
+        document.addEventListener("DOMContentLoaded", async () => {
+            await loadProfile();
+            await loadCharacters();
+        });
     </script>
 </body>
 </html>
