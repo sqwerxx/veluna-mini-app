@@ -64,6 +64,7 @@
         
         body.light-theme .custom-card {
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            background: var(--bg-card);
         }
 
         .custom-border {
@@ -270,31 +271,31 @@
                     Пополняйте гемы через безопасный шлюз Telegram Stars. Нажмите на пакет, чтобы совершить оплату:
                 </p>
                 <div class="grid grid-cols-1 gap-2">
-                    <button onclick="redirectToBotShop('gems')" class="btn-secondary-dark rounded-xl px-4 h-12 flex items-center justify-between text-xs font-semibold custom-card">
+                    <button onclick="confirmPurchase('50 Гемов', 50, 'gems')" class="btn-secondary-dark rounded-xl px-4 h-12 flex items-center justify-between text-xs font-semibold custom-card">
                         <span class="flex items-center gap-2">
                             <span class="material-icons-round text-pink text-base">diamond</span> 50 Гемов
                         </span>
                         <span class="text-pink flex items-center gap-1">50 <span class="material-icons-round text-xs text-amber-400">star</span></span>
                     </button>
-                    <button onclick="redirectToBotShop('gems')" class="btn-secondary-dark rounded-xl px-4 h-12 flex items-center justify-between text-xs font-semibold custom-card">
+                    <button onclick="confirmPurchase('150 Гемов', 125, 'gems')" class="btn-secondary-dark rounded-xl px-4 h-12 flex items-center justify-between text-xs font-semibold custom-card">
                         <span class="flex items-center gap-2">
                             <span class="material-icons-round text-pink text-base">diamond</span> 150 Гемов
                         </span>
                         <span class="text-pink flex items-center gap-1">125 <span class="material-icons-round text-xs text-amber-400">star</span></span>
                     </button>
-                    <button onclick="redirectToBotShop('gems')" class="btn-secondary-dark rounded-xl px-4 h-12 flex items-center justify-between text-xs font-semibold custom-card">
+                    <button onclick="confirmPurchase('500 Гемов', 350, 'gems')" class="btn-secondary-dark rounded-xl px-4 h-12 flex items-center justify-between text-xs font-semibold custom-card">
                         <span class="flex items-center gap-2">
                             <span class="material-icons-round text-pink text-base">diamond</span> 500 Гемов
                         </span>
                         <span class="text-pink flex items-center gap-1">350 <span class="material-icons-round text-xs text-amber-400">star</span></span>
                     </button>
-                    <button onclick="redirectToBotShop('gems')" class="btn-secondary-dark rounded-xl px-4 h-12 flex items-center justify-between text-xs font-semibold custom-card">
+                    <button onclick="confirmPurchase('1200 Гемов', 750, 'gems')" class="btn-secondary-dark rounded-xl px-4 h-12 flex items-center justify-between text-xs font-semibold custom-card">
                         <span class="flex items-center gap-2">
                             <span class="material-icons-round text-pink text-base">diamond</span> 1200 Гемов
                         </span>
                         <span class="text-pink flex items-center gap-1">750 <span class="material-icons-round text-xs text-amber-400">star</span></span>
                     </button>
-                    <button onclick="redirectToBotShop('gems')" class="btn-secondary-dark rounded-xl px-4 h-12 flex items-center justify-between text-xs font-semibold custom-card">
+                    <button onclick="confirmPurchase('3000 Гемов', 1500, 'gems')" class="btn-secondary-dark rounded-xl px-4 h-12 flex items-center justify-between text-xs font-semibold custom-card">
                         <span class="flex items-center gap-2">
                             <span class="material-icons-round text-pink text-base">diamond</span> 3000 Гемов
                         </span>
@@ -309,7 +310,7 @@
                     Покупайте наборы ресурсов в боте со скидкой через систему Telegram Stars:
                 </p>
                 <div class="grid grid-cols-1 gap-3">
-                    <button onclick="redirectToBotShop('packs')" class="btn-secondary-dark rounded-2xl p-4 h-auto flex flex-col items-start text-xs gap-1.5 text-left custom-card">
+                    <button onclick="confirmPurchase('Starter Pack', 350, 'packs')" class="btn-secondary-dark rounded-2xl p-4 h-auto flex flex-col items-start text-xs gap-1.5 text-left custom-card">
                         <div class="flex justify-between w-full font-bold text-sm">
                             <span class="flex items-center gap-1.5 text-[var(--text-main)]">
                                 <span class="material-icons-round text-pink text-base">rocket_launch</span> Starter Pack
@@ -319,7 +320,7 @@
                         <span class="text-[10px] text-muted font-normal">300 кредитов чата + 300 гемов</span>
                     </button>
                     
-                    <button onclick="redirectToBotShop('packs')" class="btn-secondary-dark rounded-2xl p-4 h-auto flex flex-col items-start text-xs gap-1.5 text-left custom-card">
+                    <button onclick="confirmPurchase('Premium Pack', 1000, 'packs')" class="btn-secondary-dark rounded-2xl p-4 h-auto flex flex-col items-start text-xs gap-1.5 text-left custom-card">
                         <div class="flex justify-between w-full font-bold text-sm">
                             <span class="flex items-center gap-1.5 text-[var(--text-main)]">
                                 <span class="material-icons-round text-pink text-base">local_fire_department</span> Premium Pack
@@ -329,7 +330,7 @@
                         <span class="text-[10px] text-muted font-normal">1000 кредитов чата + 1000 гемов</span>
                     </button>
                     
-                    <button onclick="redirectToBotShop('packs')" class="btn-secondary-dark rounded-2xl p-4 h-auto flex flex-col items-start text-xs gap-1.5 text-left custom-card">
+                    <button onclick="confirmPurchase('Ultra Pack', 2500, 'packs')" class="btn-secondary-dark rounded-2xl p-4 h-auto flex flex-col items-start text-xs gap-1.5 text-left custom-card">
                         <div class="flex justify-between w-full font-bold text-sm">
                             <span class="flex items-center gap-1.5 text-[var(--text-main)]">
                                 <span class="material-icons-round text-pink text-base">bolt</span> Ultra Pack
@@ -351,40 +352,40 @@
                 <div class="space-y-2">
                     <label class="text-[10px] text-pink font-bold uppercase tracking-wider block">Выбрать готовый пакет связи</label>
                     <div class="grid grid-cols-1 gap-2">
-                        <button onclick="executeFastExchange(5)" class="btn-secondary-dark rounded-xl px-4 h-12 flex items-center justify-between text-xs font-semibold custom-card">
+                        <button onclick="executeFastExchange(50)" class="btn-secondary-dark rounded-xl px-4 h-12 flex items-center justify-between text-xs font-semibold custom-card">
                             <span class="flex items-center gap-2">
                                 <span class="material-icons-round text-muted text-base">bolt</span> 50 Кредитов
                             </span>
-                            <span class="text-pink">5 💎</span>
+                            <span class="text-pink flex items-center gap-1 font-semibold">50 <span class="material-icons-round text-sm text-pink">diamond</span></span>
                         </button>
-                        <button onclick="executeFastExchange(15)" class="btn-secondary-dark rounded-xl px-4 h-12 flex items-center justify-between text-xs font-semibold custom-card">
+                        <button onclick="executeFastExchange(125)" class="btn-secondary-dark rounded-xl px-4 h-12 flex items-center justify-between text-xs font-semibold custom-card">
                             <span class="flex items-center gap-2">
                                 <span class="material-icons-round text-muted text-base">bolt</span> 150 Кредитов
                             </span>
-                            <span class="text-pink">15 💎</span>
+                            <span class="text-pink flex items-center gap-1 font-semibold">125 <span class="material-icons-round text-sm text-pink">diamond</span></span>
                         </button>
-                        <button onclick="executeFastExchange(35)" class="btn-secondary-dark rounded-xl px-4 h-12 flex items-center justify-between text-xs font-semibold custom-card">
+                        <button onclick="executeFastExchange(350)" class="btn-secondary-dark rounded-xl px-4 h-12 flex items-center justify-between text-xs font-semibold custom-card">
                             <span class="flex items-center gap-2">
                                 <span class="material-icons-round text-muted text-base">bolt</span> 500 Кредитов
                             </span>
-                            <span class="text-pink">35 💎</span>
+                            <span class="text-pink flex items-center gap-1 font-semibold">350 <span class="material-icons-round text-sm text-pink">diamond</span></span>
                         </button>
-                        <button onclick="executeFastExchange(75)" class="btn-secondary-dark rounded-xl px-4 h-12 flex items-center justify-between text-xs font-semibold custom-card">
+                        <button onclick="executeFastExchange(750)" class="btn-secondary-dark rounded-xl px-4 h-12 flex items-center justify-between text-xs font-semibold custom-card">
                             <span class="flex items-center gap-2">
                                 <span class="material-icons-round text-muted text-base">bolt</span> 1200 Кредитов
                             </span>
-                            <span class="text-pink">75 💎</span>
+                            <span class="text-pink flex items-center gap-1 font-semibold">750 <span class="material-icons-round text-sm text-pink">diamond</span></span>
                         </button>
-                        <button onclick="executeFastExchange(150)" class="btn-secondary-dark rounded-xl px-4 h-12 flex items-center justify-between text-xs font-semibold custom-card">
+                        <button onclick="executeFastExchange(1500)" class="btn-secondary-dark rounded-xl px-4 h-12 flex items-center justify-between text-xs font-semibold custom-card">
                             <span class="flex items-center gap-2">
                                 <span class="material-icons-round text-muted text-base">bolt</span> 3000 Кредитов
                             </span>
-                            <span class="text-pink">150 💎</span>
+                            <span class="text-pink flex items-center gap-1 font-semibold">1500 <span class="material-icons-round text-sm text-pink">diamond</span></span>
                         </button>
                     </div>
                 </div>
 
-                <div class="h-px bg-zinc-800 my-2"></div>
+                <div class="h-px border-t custom-border my-2"></div>
 
                 <!-- Произвольный обмен -->
                 <div class="space-y-3">
@@ -406,11 +407,33 @@
         </div>
     </main>
 
+    <!-- Кастомное диалоговое окно подтверждения покупки за Звёзды -->
+    <div id="payment-confirm-modal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-6 backdrop-blur-sm animate-smooth-fade">
+        <div class="custom-card w-full max-w-xs rounded-2xl p-5 space-y-4 text-center">
+            <div class="w-12 h-12 rounded-full bg-pink-500/10 flex items-center justify-center mx-auto text-[var(--accent-pink)]">
+                <span class="material-icons-round text-2xl">star</span>
+            </div>
+            <div class="space-y-1">
+                <h4 class="font-bold text-sm tracking-tight text-[var(--text-main)]">Подтверждение оплаты</h4>
+                <p id="confirm-modal-text" class="text-xs text-muted leading-relaxed"></p>
+            </div>
+            <div class="grid grid-cols-2 gap-3 pt-1">
+                <button onclick="closeConfirmModal()" class="btn-secondary-dark rounded-xl flex items-center justify-center text-xs h-10">
+                    Отмена
+                </button>
+                <button id="confirm-modal-yes-btn" class="btn-primary-pink rounded-xl flex items-center justify-center text-xs font-bold h-10 shadow-md">
+                    Оплатить
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const BACKEND_URL = "https://sqwerxx-veluna.hf.space";
         let userId = 123456789; 
         let currentCharacterId = null;
         let globalCharacters = [];
+        let pendingConfirmAction = null;
 
         // Тема оформления
         if (localStorage.getItem('theme') === 'light') {
@@ -464,6 +487,37 @@
                 tabExchange.className = 'text-pink border-b-2 border-pink-500 pb-1 font-semibold flex items-center gap-1';
             }
         }
+
+        // Красивое кастомное модальное подтверждение вместо обычных системных диалогов
+        function confirmPurchase(itemName, starsCount, category) {
+            const modal = document.getElementById('payment-confirm-modal');
+            const textEl = document.getElementById('confirm-modal-text');
+            const yesBtn = document.getElementById('confirm-modal-yes-btn');
+            
+            textEl.innerHTML = `Вы хотите оплатить <span class="text-[var(--text-main)] font-semibold">${itemName}</span> за <span class="text-pink font-bold">${starsCount}</span> <span class="material-icons-round text-xs text-amber-400 align-middle">star</span>?`;
+            
+            pendingConfirmAction = () => {
+                redirectToBotShop(category);
+                closeConfirmModal();
+            };
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeConfirmModal() {
+            const modal = document.getElementById('payment-confirm-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            pendingConfirmAction = null;
+        }
+
+        // Обработчик кнопки согласия в окне оплаты
+        document.getElementById('confirm-modal-yes-btn').addEventListener('click', () => {
+            if (pendingConfirmAction) {
+                pendingConfirmAction();
+            }
+        });
 
         function redirectToBotShop(category = 'shop') {
             const botUsername = "VelunaAIbot"; 
