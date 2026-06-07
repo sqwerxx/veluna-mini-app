@@ -5,238 +5,339 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Veluna</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
     <style>
+        @font-face {
+            font-family: 'Vasek';
+            src: url('https://localfonts.eu/wp-content/uploads/fonts/vasek/Vasek.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
         :root {
-            --bg-gradient: linear-gradient(180deg, #09090b 0%, #030303 100%);
-            --bg-card: #111113;
-            --bg-card-gradient: linear-gradient(145deg, #161619 0%, #0e0e10 100%);
-            --border-color: #222226;
-            --text-main: #ffffff;
-            --text-muted: #7e7e86;
-            --accent-pink: #ffb3c6;
-            --accent-pink-hover: #ffc2d1;
-            --btn-gradient: linear-gradient(90deg, #ffb3c6 0%, #ff85a2 100%);
+            --bg-app: #0e1013;
+            --bg-card: #14171a;
+            --border-flat: #22262b;
+            --text-main: #f1f5f9;
+            --text-muted: #8a99ad;
+            --accent: #3abff8;
+            --bg-input: #1c2024;
+            --chat-user-bg: #22262b;
+            --chat-bot-bg: #14171a;
+            --btn-hover: #1e2328;
         }
 
         body.light-theme {
-            --bg-gradient: linear-gradient(180deg, #fcfcfc 0%, #f4f4f5 100%);
+            --bg-app: #f1f5f9;
             --bg-card: #ffffff;
-            --bg-card-gradient: linear-gradient(145deg, #ffffff 0%, #f9f9fb 100%);
-            --border-color: #e4e4e7;
-            --text-main: #09090b;
-            --text-muted: #8b8b93;
-            --accent-pink: #ff85a2;
-            --accent-pink-hover: #ff6b8b;
-            --btn-gradient: linear-gradient(90deg, #ff85a2 0%, #ff4d73 100%);
+            --border-flat: #cbd5e1;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --accent: #0284c7;
+            --bg-input: #f8fafc;
+            --chat-user-bg: #e2e8f0;
+            --chat-bot-bg: #ffffff;
+            --btn-hover: #f3f4f6;
         }
 
         body {
-            background: var(--bg-gradient);
+            background-color: var(--bg-app);
             color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Inter", sans-serif;
+            font-family: 'Vasek', 'Caveat', 'Comfortaa', cursive, sans-serif;
             -webkit-tap-highlight-color: transparent;
-            transition: background 0.3s ease;
+            font-size: 1.25rem;
+            transition: background-color 0.25s ease, color 0.25s ease;
         }
 
         .custom-card {
-            background: var(--bg-card-gradient);
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        }
-        
-        body.light-theme .custom-card {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-flat);
+            color: var(--text-main);
         }
 
         .custom-border {
-            border-color: var(--border-color);
+            border-color: var(--border-flat);
         }
 
-        /* Премиальная розовая акцентная кнопка с мягким благородным градиентом */
-        .btn-primary-pink {
-            height: 48px;
-            background: var(--btn-gradient);
-            color: #000000;
-            font-weight: 600;
-            font-size: 0.9rem;
-            letter-spacing: -0.01em;
-            transition: opacity 0.2s ease, transform 0.1s ease;
+        .custom-input {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-flat);
+            color: var(--text-main);
         }
         
-        .btn-primary-pink:active {
-            transform: scale(0.98);
-            opacity: 0.9;
-        }
-
-        /* Вторичная кнопка строго того же размера */
-        .btn-secondary-dark {
-            height: 48px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: background 0.2s ease, transform 0.1s ease;
-        }
-
-        .btn-secondary-dark:active {
-            transform: scale(0.98);
-            background: var(--border-color);
-        }
-
-        /* Инпуты */
-        .custom-input {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-        }
         .custom-input:focus {
-            border-color: var(--accent-pink);
+            border-color: var(--text-muted);
         }
 
-        .text-pink { color: var(--accent-pink); }
-        .text-muted { color: var(--text-muted); }
+        .text-muted {
+            color: var(--text-muted);
+        }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        .animate-smooth-fade {
-            animation: smoothFade 0.3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        
+        .animate-enter {
+            animation: flatEnter 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-        @keyframes smoothFade {
+
+        @keyframes flatEnter {
             0% { opacity: 0; transform: translateY(6px); }
             100% { opacity: 1; transform: translateY(0); }
         }
+
+        .nav-btn {
+            color: var(--text-muted);
+            transition: color 0.2s ease;
+        }
+        .nav-btn.active {
+            color: var(--text-main);
+            font-weight: bold;
+        }
     </style>
 </head>
-<body class="h-screen flex flex-col justify-between overflow-hidden select-none relative">
+<body class="h-screen flex flex-col justify-between overflow-hidden select-none">
 
-    <header class="custom-border border-b px-6 h-16 flex items-center justify-between shrink-0 bg-opacity-70 backdrop-blur-md z-30">
+    <header class="custom-border border-b px-5 py-4 flex items-center justify-between shrink-0 sticky top-0 z-30 bg-[var(--bg-card)] bg-opacity-95 backdrop-blur-sm">
         <div class="flex items-center gap-2.5 cursor-pointer" onclick="location.reload()">
-            <span class="material-icons-round text-pink text-2xl">favorite</span>
-            <span class="font-bold text-lg tracking-tight">Veluna<span class="text-pink font-light">
+            <span class="material-icons-round text-lg" style="color: var(--accent);">auto_awesome</span>
+            <span class="font-bold text-2xl tracking-wide uppercase">Veluna</span>
         </div>
         
-        <button onclick="toggleTheme()" class="w-10 h-10 rounded-full border custom-border flex items-center justify-center text-main active:scale-95 transition">
-            <span id="theme-icon" class="material-icons-round text-lg">dark_mode</span>
+        <button onclick="toggleTheme()" class="custom-card p-2 rounded-lg flex items-center justify-center transition hover:bg-[var(--btn-hover)] active:scale-95">
+            <span id="theme-icon" class="material-icons-round text-base">light_mode</span>
         </button>
     </header>
 
-    <section class="custom-border border-b px-6 h-12 flex items-center justify-between shrink-0 bg-black/20 text-xs font-medium">
-        <div class="flex items-center gap-2">
-            <span class="material-icons-round text-pink text-sm">diamond</span>
-            <span class="text-muted">Баланс:</span>
-            <span id="gems-count" class="font-bold text-sm tracking-wide"></span>
+    <section class="custom-border border-b px-5 py-2.5 flex items-center justify-between shrink-0 text-sm bg-[var(--bg-card)] opacity-90 font-sans">
+        <div class="flex items-center gap-1.5">
+            <span class="text-muted text-xs uppercase tracking-wider">Запас:</span>
+            <div class="flex items-center gap-1">
+                <span id="gems-count" class="font-bold" style="color: var(--accent);">..</span>
+                <span class="text-xs opacity-80">💎 Гем.</span>
+            </div>
         </div>
-        <div class="h-4 w-px custom-border border-l"></div>
-        <div class="flex items-center gap-2">
-            <span class="material-icons-round text-muted text-sm">bolt</span>
-            <span class="text-muted">Кредиты:</span>
-            <span id="credits-count" class="font-bold text-sm tracking-wide"></span>
+        <div class="h-3 w-px bg-slate-500 opacity-20"></div>
+        <div class="flex items-center gap-1.5">
+            <span class="text-muted text-xs uppercase tracking-wider">Лимит связи:</span>
+            <div class="flex items-center gap-1">
+                <span id="credits-count" class="font-bold">..</span>
+                <span class="text-xs opacity-80">✉️ Кред.</span>
+            </div>
         </div>
     </section>
 
-    <main id="view-menu" class="flex-1 overflow-y-auto p-5 space-y-6 no-scrollbar animate-smooth-fade">
-        
-        <div class="custom-card rounded-2xl p-5 space-y-4">
-            <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-lg bg-pink-500/10 flex items-center justify-center">
-                    <span class="material-icons-round text-pink text-lg">auto_awesome</span>
+    <main id="view-menu" class="flex-1 overflow-y-auto p-5 space-y-5 noble-scroll no-scrollbar animate-enter">
+        <div class="custom-card rounded-lg p-5 space-y-3.5">
+            <div class="flex items-center gap-2">
+                <span class="material-icons-round text-base" style="color: var(--accent);">card_giftcard</span>
+                <h4 class="font-bold text-base uppercase tracking-wider">Реферальная Система</h4>
+            </div>
+            <p class="text-xs leading-relaxed text-muted font-sans">
+                Пригласите 3 друзей через нашего бота, и вы мгновенно получите бесплатный пакет из 30 кредитов для общения с ИИ Компаньонами!
+            </p>
+            <div class="pt-1">
+                <button onclick="shareInviteLink()" class="w-full custom-card hover:bg-[var(--btn-hover)] py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition active:scale-[0.98]">
+                    <span class="material-icons-round text-sm">share</span> Пригласить друзей
+                </button>
+            </div>
+        </div>
+
+        <div class="space-y-0.5">
+            <h2 class="text-xs font-bold uppercase tracking-widest text-muted font-sans">Выбор собеседника</h2>
+            <p class="text-xl font-bold tracking-wide">Доступные ИИ Компаньоны</p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4" id="characters-list">
+            <div class="text-center p-12 text-sm font-bold flex flex-col items-center justify-center gap-3 custom-card border-dashed rounded-lg text-muted">
+                Синхронизация данных...
+            </div>
+        </div>
+    </main>
+
+    <main id="view-shop" class="hidden flex-1 overflow-y-auto p-5 space-y-6 no-scrollbar animate-enter">
+        <div class="space-y-3">
+            <div class="space-y-0.5">
+                <h2 class="text-xs font-bold uppercase tracking-widest text-muted font-sans">Пополнение валюты</h2>
+                <p class="text-xl font-bold tracking-wide">💎 Магазин Гемов (Telegram Stars)</p>
+            </div>
+            <p class="text-xs text-muted font-sans leading-relaxed">
+                Покупка Гемов осуществляется через безопасные счета Telegram Stars внутри нашего официального бота. Выберите пакет, чтобы перейти к оплате:
+            </p>
+            <div class="grid grid-cols-2 gap-3 font-sans">
+                <div onclick="buyGemsInBot()" class="custom-card rounded-lg p-3.5 flex flex-col justify-between items-start gap-3 cursor-pointer hover:bg-[var(--btn-hover)] transition active:scale-95">
+                    <div>
+                        <div class="text-lg font-bold text-[var(--text-main)]">💎 5 Гемов</div>
+                        <div class="text-[11px] text-muted uppercase tracking-wider">Начальный пак</div>
+                    </div>
+                    <span class="text-xs font-bold bg-[var(--bg-app)] border border-[var(--border-flat)] px-2.5 py-1 rounded-md text-amber-500 flex items-center gap-1">⭐ 25</span>
                 </div>
-                <div>
-                    <h4 class="font-semibold text-sm">Пополнение и рефералы</h4>
-                    <p class="text-[11px] text-muted">Получите кредиты для общения</p>
+                <div onclick="buyGemsInBot()" class="custom-card rounded-lg p-3.5 flex flex-col justify-between items-start gap-3 cursor-pointer hover:bg-[var(--btn-hover)] transition active:scale-95">
+                    <div>
+                        <div class="text-lg font-bold text-[var(--text-main)]">💎 15 Гемов</div>
+                        <div class="text-[11px] text-muted uppercase tracking-wider">Стандартный пак</div>
+                    </div>
+                    <span class="text-xs font-bold bg-[var(--bg-app)] border border-[var(--border-flat)] px-2.5 py-1 rounded-md text-amber-500 flex items-center gap-1">⭐ 75</span>
+                </div>
+                <div onclick="buyGemsInBot()" class="custom-card rounded-lg p-3.5 flex flex-col justify-between items-start gap-3 cursor-pointer hover:bg-[var(--btn-hover)] transition active:scale-95">
+                    <div>
+                        <div class="text-lg font-bold text-[var(--text-main)]">💎 40 Гемов</div>
+                        <div class="text-[11px] text-muted uppercase tracking-wider">Популярный пак</div>
+                    </div>
+                    <span class="text-xs font-bold bg-[var(--bg-app)] border border-[var(--border-flat)] px-2.5 py-1 rounded-md text-amber-500 flex items-center gap-1">⭐ 200</span>
+                </div>
+                <div onclick="buyGemsInBot()" class="custom-card rounded-lg p-3.5 flex flex-col justify-between items-start gap-3 cursor-pointer hover:bg-[var(--btn-hover)] transition active:scale-95">
+                    <div>
+                        <div class="text-lg font-bold text-[var(--text-main)]">💎 100 Гемов</div>
+                        <div class="text-[11px] text-muted uppercase tracking-wider">Большой запас</div>
+                    </div>
+                    <span class="text-xs font-bold bg-[var(--bg-app)] border border-[var(--border-flat)] px-2.5 py-1 rounded-md text-amber-500 flex items-center gap-1">⭐ 500</span>
+                </div>
+                <div onclick="buyGemsInBot()" class="custom-card rounded-lg col-span-2 p-3.5 flex justify-between items-center cursor-pointer hover:bg-[var(--btn-hover)] transition active:scale-95">
+                    <div>
+                        <div class="text-lg font-bold text-[var(--text-main)]">💎 250 Гемов</div>
+                        <div class="text-[11px] text-muted uppercase tracking-wider">Максимальный набор Ультра</div>
+                    </div>
+                    <span class="text-xs font-bold bg-[var(--bg-app)] border border-[var(--border-flat)] px-3 py-1.5 rounded-md text-amber-500 flex items-center gap-1">⭐ 1250</span>
                 </div>
             </div>
-            
-            <p class="text-xs font-normal leading-relaxed text-muted">
-                Не хватает кредитов? Приглашайте друзей и получайте бонусные <span class="text-white font-medium">кредиты</span> мгновенно или обменяйте <span class="text-pink font-medium">гемы</span> на кредиты через нашего официального бота.
+        </div>
+
+        <div class="space-y-3 pt-2">
+            <div class="space-y-0.5">
+                <h2 class="text-xs font-bold uppercase tracking-widest text-muted font-sans">Конвертация баланса</h2>
+                <p class="text-xl font-bold tracking-wide">✉️ Обмен Гемов на Кредиты связи</p>
+            </div>
+            <p class="text-xs text-muted font-sans leading-relaxed">
+                Обменивайте Ваши премиум Гемы на Кредиты для текстового взаимодействия по фиксированному курсу бэкенда: <span class="font-bold text-[var(--text-main)]">1 Гем = 2 Кредита</span>.
             </p>
             
-            <div class="grid grid-cols-2 gap-3 pt-1">
-                <button onclick="shareInviteLink()" class="btn-secondary-dark rounded-xl flex items-center justify-center gap-2">
-                    <span class="material-icons-round text-sm">share</span> Пригласить
-                </button>
-                <button onclick="openExchangeModal()" class="btn-primary-pink rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-pink-500/10">
-                    <span class="material-icons-round text-sm">currency_exchange</span> Обменять
-                </button>
-            </div>
-        </div>
-
-        <div class="space-y-3">
-            <h2 class="text-xs uppercase tracking-widest text-muted font-bold px-1">Ваши любимки <3</h2>
-            
-            <div class="grid grid-cols-1 gap-3" id="characters-list">
-                <div class="text-center py-12 text-muted custom-card rounded-2xl border-dashed flex flex-col items-center justify-center gap-2">
-                    <span class="material-icons-round animate-spin text-pink text-2xl">sync</span>
-                    <span class="text-xs font-medium">Синхронизация комнат общения...</span>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <main id="view-chat" class="hidden flex-1 flex-col justify-between overflow-hidden bg-black/10 animate-smooth-fade">
-        <div class="custom-border border-b px-5 h-16 flex items-center justify-between z-10 bg-zinc-900/40 backdrop-blur-md">
-            <div class="flex items-center gap-3.5 min-w-0">
-                <button onclick="closeChat()" class="w-10 h-10 rounded-xl border custom-border flex items-center justify-center text-muted active:text-white transition shrink-0">
-                    <span class="material-icons-round">arrow_back</span>
-                </button>
-                <img id="chat-avatar" src="" alt="" class="w-10 h-10 rounded-full object-cover border custom-border shrink-0">
-                <div class="min-w-0">
-                    <h3 id="chat-name" class="font-semibold text-sm tracking-wide truncate"></h3>
-                    <div class="flex items-center gap-1.5 mt-0.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span id="chat-status" class="text-[10px] text-muted uppercase tracking-wider block font-medium truncate"></span>
+            <div class="grid grid-cols-1 gap-2.5 font-sans">
+                <div onclick="executeFastExchange(5)" class="custom-card rounded-lg px-4 py-3 flex items-center justify-between cursor-pointer hover:bg-[var(--btn-hover)] transition active:scale-[0.99]">
+                    <div class="flex items-center gap-3">
+                        <span class="material-icons-round text-base text-muted">mail_outline</span>
+                        <div>
+                            <div class="font-bold text-sm">✉️ Пакет: 10 Кредитов</div>
+                            <div class="text-[10px] text-muted">Идеально для быстрого теста</div>
+                        </div>
                     </div>
+                    <span class="text-xs font-bold bg-[var(--bg-app)] border border-[var(--border-flat)] px-2.5 py-1 rounded-md" style="color: var(--accent);">5 💎</span>
+                </div>
+                <div onclick="executeFastExchange(15)" class="custom-card rounded-lg px-4 py-3 flex items-center justify-between cursor-pointer hover:bg-[var(--btn-hover)] transition active:scale-[0.99]">
+                    <div class="flex items-center gap-3">
+                        <span class="material-icons-round text-base text-muted">chat_bubble_outline</span>
+                        <div>
+                            <div class="font-bold text-sm">✉️ Пакет: 30 Кредитов</div>
+                            <div class="text-[10px] text-muted">Оптимальный выбор на вечер</div>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold bg-[var(--bg-app)] border border-[var(--border-flat)] px-2.5 py-1 rounded-md" style="color: var(--accent);">15 💎</span>
+                </div>
+                <div onclick="executeFastExchange(35)" class="custom-card rounded-lg px-4 py-3 flex items-center justify-between cursor-pointer hover:bg-[var(--btn-hover)] transition active:scale-[0.99]">
+                    <div class="flex items-center gap-3">
+                        <span class="material-icons-round text-base text-muted">forum</span>
+                        <div>
+                            <div class="font-bold text-sm">✉️ Пакет: 70 Кредитов</div>
+                            <div class="text-[10px] text-muted">Долгая полноценная сессия</div>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold bg-[var(--bg-app)] border border-[var(--border-flat)] px-2.5 py-1 rounded-md" style="color: var(--accent);">35 💎</span>
+                </div>
+                <div onclick="executeFastExchange(75)" class="custom-card rounded-lg px-4 py-3 flex items-center justify-between cursor-pointer hover:bg-[var(--btn-hover)] transition active:scale-[0.99]">
+                    <div class="flex items-center gap-3">
+                        <span class="material-icons-round text-base text-muted">question_answer</span>
+                        <div>
+                            <div class="font-bold text-sm">✉️ Пакет: 150 Кредитов</div>
+                            <div class="text-[10px] text-muted">Выгодный набор для общения</div>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold bg-[var(--bg-app)] border border-[var(--border-flat)] px-2.5 py-1 rounded-md" style="color: var(--accent);">75 💎</span>
+                </div>
+                <div onclick="executeFastExchange(175)" class="custom-card rounded-lg px-4 py-3 flex items-center justify-between cursor-pointer hover:bg-[var(--btn-hover)] transition active:scale-[0.99]">
+                    <div class="flex items-center gap-3">
+                        <span class="material-icons-round text-base text-muted">bolt</span>
+                        <div>
+                            <div class="font-bold text-sm">✉️ Пакет: 350 Кредитов</div>
+                            <div class="text-[10px] text-muted">Премиум набор без ограничений</div>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold bg-[var(--bg-app)] border border-[var(--border-flat)] px-2.5 py-1 rounded-md" style="color: var(--accent);">175 💎</span>
+                </div>
+            </div>
+            
+            <button onclick="openExchangeModal()" class="w-full mt-2 custom-card hover:bg-[var(--btn-hover)] py-3 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition active:scale-[0.98]">
+                <span class="material-icons-round text-sm">add_moderator</span> Произвольный обмен валюты
+            </button>
+        </div>
+    </main>
+
+    <main id="view-chat" class="hidden flex-1 flex-col justify-between overflow-hidden animate-enter">
+        <div class="custom-border border-b p-3.5 flex items-center justify-between z-10 bg-[var(--bg-card)] bg-opacity-95 backdrop-blur-sm">
+            <div class="flex items-center gap-3">
+                <button onclick="closeChat()" class="p-2 rounded-lg custom-card flex items-center justify-center hover:bg-[var(--btn-hover)] active:scale-95">
+                    <span class="material-icons-round text-base">arrow_back</span>
+                </button>
+                <img id="chat-avatar" src="" alt="" class="w-10 h-10 rounded-lg object-cover border custom-border">
+                <div>
+                    <h3 id="chat-name" class="font-bold text-lg"></h3>
+                    <span id="chat-status" class="text-xs font-bold text-muted uppercase block font-sans"></span>
                 </div>
             </div>
         </div>
 
-        <div id="chat-history" class="flex-1 overflow-y-auto p-5 space-y-4 no-scrollbar"></div>
+        <div id="chat-history" class="flex-1 overflow-y-auto p-5 space-y-4 no-scrollbar bg-transparent"></div>
 
-        <div class="p-4 custom-border border-t bg-zinc-950/80 backdrop-blur-md">
-            <div class="flex gap-3 items-center max-w-4xl mx-auto">
-                <input type="text" id="message-input" placeholder="Напишите что-нибудь горячее..." 
-                       class="flex-1 custom-input h-12 rounded-xl px-4 text-sm focus:outline-none transition font-normal">
+        <div class="p-4 custom-border border-t bg-[var(--bg-card)] bg-opacity-95 backdrop-blur-sm">
+            <div class="flex gap-2.5 items-center">
+                <input type="text" id="message-input" placeholder="Напишите сообщение..." 
+                       class="flex-1 custom-input rounded-lg px-4 py-3 text-base focus:outline-none transition font-sans"
+                       onkeypress="if(event.key === 'Enter') handleSend()">
                 
-                <button onclick="handleSend()" id="send-btn" class="w-12 h-12 rounded-xl bg-pink-500 text-black flex items-center justify-center active:scale-95 transition shrink-0 shadow-lg shadow-pink-500/20">
-                    <span class="material-icons-round text-xl">send</span>
+                <button onclick="handleSend()" id="send-btn" class="custom-card hover:bg-[var(--btn-hover)] active:scale-95 p-3 rounded-lg transition flex items-center justify-center shrink-0">
+                    <span class="material-icons-round text-base" style="color: var(--accent);">send</span>
                 </button>
+            </div>
+            <div class="flex items-center gap-2 mt-2 px-1 opacity-60 font-sans text-muted">
+                <span class="material-icons-round text-xs">info</span>
+                <p class="text-[11px] uppercase tracking-wider">Каждое отправленное сообщение списывает 1 кредит связи</p>
             </div>
         </div>
     </main>
 
-    <div id="exchange-modal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-6 backdrop-blur-sm">
-        <div class="custom-card w-full max-w-sm rounded-2xl p-6 space-y-5 animate-smooth-fade">
+    <footer id="nav-bar" class="custom-border border-t shrink-0 flex items-center justify-around py-2.5 bg-[var(--bg-card)] sticky bottom-0 z-40">
+        <button id="tab-menu" onclick="switchTab('menu')" class="nav-btn active flex flex-col items-center gap-0.5 transition active:scale-90">
+            <span class="material-icons-round text-xl">smart_toy</span>
+            <span class="text-[10px] uppercase font-sans tracking-wider">Компаньоны</span>
+        </button>
+        <button id="tab-shop" onclick="switchTab('shop')" class="nav-btn flex flex-col items-center gap-0.5 transition active:scale-90">
+            <span class="material-icons-round text-xl">shopping_bag</span>
+            <span class="text-[10px] uppercase font-sans tracking-wider">Магазин</span>
+        </button>
+    </footer>
+
+    <div id="exchange-modal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-5 backdrop-blur-sm">
+        <div class="custom-card rounded-lg w-full max-w-sm p-6 space-y-4 animate-enter">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
-                    <span class="material-icons-round text-pink">bolt</span>
-                    <h3 class="font-bold text-sm">Конвертировать кристаллы</h3>
+                    <span class="material-icons-round text-base" style="color: var(--accent);">currency_exchange</span>
+                    <h3 class="font-bold text-base uppercase tracking-wider">Конвертировать</h3>
                 </div>
-                <button onclick="closeExchangeModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-muted hover:text-white transition">
-                    <span class="material-icons-round">close</span>
+                <button onclick="closeExchangeModal()" class="p-1 rounded-md hover:bg-[var(--btn-hover)] transition">
+                    <span class="material-icons-round text-base">close</span>
                 </button>
             </div>
-            
-            <p class="text-xs leading-relaxed text-muted">
-                Обменяйте <span class="text-white font-medium">гемы</span> на <span class="text-pink font-medium">кредиты</span> для общения с девушками. Курс обмена фиксированный: <span class="text-white font-semibold">1 гем = 1 кредит</span>.
+            <p class="text-xs leading-relaxed text-muted font-sans">
+                Введите точное количество Гемов, которое вы хотите списать. Вы получите в 2 раза больше Кредитов связи.
             </p>
-            
-            <div class="space-y-2">
-                <label class="text-[10px] text-muted font-bold uppercase tracking-wider block">Сколько обменять?</label>
-                <input type="number" id="exchange-amount" value="5" min="1" class="w-full custom-input h-11 rounded-xl px-4 font-bold text-sm focus:outline-none">
+            <div class="space-y-1.5 font-sans">
+                <label class="text-xs font-bold text-muted uppercase tracking-widest block">Количество к списанию</label>
+                <input type="number" id="exchange-amount" value="1" min="1" class="w-full custom-input rounded-lg p-2.5 text-base font-bold focus:outline-none">
             </div>
-            
-            <button onclick="submitExchange()" class="btn-primary-pink w-full rounded-xl flex items-center justify-center gap-2">
-                <span class="material-icons-round text-sm">done</span> Подтвердить обмен
+            <button onclick="submitExchange()" class="w-full custom-card py-3 rounded-lg text-xs font-bold uppercase tracking-wider hover:bg-[var(--btn-hover)] transition font-sans">
+                Подтвердить обмен
             </button>
         </div>
     </div>
@@ -246,11 +347,11 @@
         let userId = 123456789; 
         let currentCharacterId = null;
         let globalCharacters = [];
+        const botUsername = "VelunaAIbot";
 
-        // Тема оформления
         if (localStorage.getItem('theme') === 'light') {
             document.body.classList.add('light-theme');
-            document.getElementById('theme-icon').innerText = 'light_mode';
+            document.getElementById('theme-icon').innerText = 'dark_mode';
         }
 
         function toggleTheme() {
@@ -258,16 +359,34 @@
             body.classList.toggle('light-theme');
             const isLight = body.classList.contains('light-theme');
             localStorage.setItem('theme', isLight ? 'light' : 'dark');
-            document.getElementById('theme-icon').innerText = isLight ? 'light_mode' : 'dark_mode';
+            document.getElementById('theme-icon').innerText = isLight ? 'dark_mode' : 'light_mode';
         }
 
-        // Интеграция с Telegram WebApp
         if (window.Telegram && window.Telegram.WebApp) {
             const tg = window.Telegram.WebApp;
             tg.ready();
             tg.expand();
             if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
                 userId = tg.initDataUnsafe.user.id;
+            }
+        }
+
+        function switchTab(tab) {
+            const viewMenu = document.getElementById('view-menu');
+            const viewShop = document.getElementById('view-shop');
+            const tabMenu = document.getElementById('tab-menu');
+            const tabShop = document.getElementById('tab-shop');
+
+            if (tab === 'menu') {
+                viewMenu.classList.remove('hidden');
+                viewShop.classList.add('hidden');
+                tabMenu.classList.add('active');
+                tabShop.classList.remove('active');
+            } else if (tab === 'shop') {
+                viewMenu.classList.add('hidden');
+                viewShop.classList.remove('hidden');
+                tabMenu.classList.remove('active');
+                tabShop.classList.add('active');
             }
         }
 
@@ -294,36 +413,36 @@
 
                 if (globalCharacters.length === 0) {
                     listContainer.innerHTML = `
-                        <div class="text-center py-10 text-muted custom-card rounded-2xl border-dashed text-xs">
-                            Список пуст. Добавьте персонажей через панель управления.
+                        <div class="text-center p-8 text-xs font-bold custom-card rounded-lg opacity-60 font-sans text-muted">
+                            Персонажи отсутствуют. Создайте их в админ-панели бота.
                         </div>`;
                     return;
                 }
 
                 globalCharacters.forEach(char => {
                     const card = document.createElement('div');
-                    card.className = "custom-card rounded-2xl p-4 flex items-center justify-between hover:border-pink-500/30 transition duration-200 cursor-pointer animate-smooth-fade";
+                    card.className = "custom-card rounded-lg p-4 flex items-center justify-between hover:bg-[var(--btn-hover)] transition duration-200 transform active:scale-[0.99] cursor-pointer animate-enter";
                     card.onclick = () => openChat(char.id);
                     
                     card.innerHTML = `
-                        <div class="flex items-center gap-4 overflow-hidden">
-                            <img src="${char.avatar}" alt="${char.name}" class="w-14 h-14 rounded-xl object-cover border custom-border shrink-0">
-                            <div class="space-y-1 min-w-0">
-                                <span class="text-[9px] font-bold uppercase tracking-wider text-pink block">${char.tag || 'HOT'}</span>
-                                <h3 class="font-bold text-sm tracking-tight text-current">${char.name}</h3>
-                                <p class="text-xs text-muted truncate font-light">${char.status}</p>
+                        <div class="flex items-center gap-4">
+                            <img src="${char.avatar}" alt="${char.name}" class="w-14 h-14 rounded-lg object-cover border custom-border shrink-0">
+                            <div class="space-y-0.5">
+                                <span class="text-[10px] uppercase tracking-wider font-bold font-sans text-muted" style="color:var(--accent);">${char.tag}</span>
+                                <h3 class="font-bold text-base tracking-wide">${char.name}</h3>
+                                <p class="text-xs text-muted font-sans">${char.status}</p>
                             </div>
                         </div>
-                        <div class="w-9 h-9 rounded-full bg-pink-500/5 flex items-center justify-center text-pink shrink-0">
-                            <span class="material-icons-round text-lg">chat</span>
+                        <div class="p-2.5 rounded-lg flex items-center justify-center text-muted">
+                            <span class="material-icons-round text-base">forum</span>
                         </div>
                     `;
                     listContainer.appendChild(card);
                 });
             } catch (error) {
                 document.getElementById('characters-list').innerHTML = `
-                    <div class="text-center py-10 text-muted custom-card rounded-2xl border-dashed border-red-500/20 text-xs">
-                        Ошибка подключения к медиа-серверу системы.
+                    <div class="text-center p-8 text-xs font-bold custom-card rounded-lg border-dashed font-sans text-muted">
+                        Ошибка подключения к бэкенд серверу.
                     </div>`;
             }
         }
@@ -343,6 +462,8 @@
             appendMessage(character.greeting, 'assistant');
 
             document.getElementById('view-menu').classList.add('hidden');
+            document.getElementById('view-shop').classList.add('hidden');
+            document.getElementById('nav-bar').classList.add('hidden'); // Скрываем таббар в полноэкранном чате
             document.getElementById('view-chat').classList.remove('hidden');
             document.getElementById('view-chat').classList.add('flex');
         }
@@ -351,7 +472,8 @@
             currentCharacterId = null;
             document.getElementById('view-chat').classList.remove('flex');
             document.getElementById('view-chat').classList.add('hidden');
-            document.getElementById('view-menu').classList.remove('hidden');
+            document.getElementById('nav-bar').classList.remove('hidden'); // Возвращаем таббар
+            switchTab('menu');
             loadProfile();
         }
 
@@ -363,7 +485,7 @@
             appendMessage(text, 'user');
             input.value = '';
 
-            const typingId = appendMessage("Печатает...", 'assistant-typing');
+            const typingId = appendMessage("Генерация ответа...", 'assistant-typing');
 
             try {
                 const response = await fetch(`${BACKEND_URL}/api/chat`, {
@@ -380,7 +502,7 @@
 
                 if (!response.ok) {
                     const err = await response.json();
-                    appendMessage(err.detail || 'Ошибка доставки пакета данных.', 'system');
+                    appendMessage(err.detail || 'Ошибка генерации ответа модуля ИИ.', 'system');
                     return;
                 }
 
@@ -390,7 +512,39 @@
 
             } catch (error) {
                 if (document.getElementById(typingId)) document.getElementById(typingId).remove();
-                appendMessage("Нестабильный канал связи. Повторите попытку.", 'system');
+                appendMessage("Не удалось получить ответ. Проверьте соединение с сетью.", 'system');
+            }
+        }
+
+        function buyGemsInBot() {
+            const inviteLink = `https://t.me/${botUsername}?start=gems`;
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.openTelegramLink(inviteLink);
+            } else {
+                window.open(inviteLink, '_blank');
+            }
+        }
+
+        async function executeFastExchange(gemsAmount) {
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/exchange`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: userId, gems_to_exchange: gemsAmount })
+                });
+
+                if (!response.ok) {
+                    const err = await response.json();
+                    alert(err.detail || "Недостаточно Гемов на вашем балансе!");
+                    return;
+                }
+
+                const data = await response.json();
+                document.getElementById('gems-count').innerText = data.gems;
+                document.getElementById('credits-count').innerText = data.credits;
+                alert(`Успешный обмен! Списано ${gemsAmount} 💎.`);
+            } catch (error) {
+                alert("Произошла ошибка во время отправки запроса обмена.");
             }
         }
 
@@ -411,7 +565,7 @@
 
                 if (!response.ok) {
                     const err = await response.json();
-                    alert(err.detail || "Недостаточно ресурсов на балансе.");
+                    alert(err.detail || "Недостаточно Гемов на вашем балансе.");
                     return;
                 }
 
@@ -420,14 +574,13 @@
                 document.getElementById('credits-count').innerText = data.credits;
                 closeExchangeModal();
             } catch (error) {
-                alert("Ошибка обработки платежного шлюза.");
+                alert("Ошибка во время отправки операции.");
             }
         }
 
         function shareInviteLink() {
-            const botUsername = "VelunaAIbot"; 
             const inviteLink = `https://t.me/${botUsername}?start=ref_${userId}`;
-            const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(inviteLink)}&text=${encodeURIComponent("Присоединяйся к приватным диалогам в Veluna Hub! 🔥")}`;
+            const shareUrl = `https://t.me/share/url?url={inviteLink}&text=Заходи%20в%20лучший%20клиент%20для%20общения%20с%20AI%20Waifu!`;
             if (window.Telegram && window.Telegram.WebApp) {
                 window.Telegram.WebApp.openTelegramLink(shareUrl);
             } else {
@@ -441,18 +594,18 @@
             const wrapper = document.createElement('div');
             
             if (sender === 'user') {
-                wrapper.className = "flex max-w-[85%] ml-auto justify-end animate-smooth-fade";
-                wrapper.innerHTML = `<div class="bg-white text-black font-normal rounded-2xl rounded-tr-sm px-4 py-2.5 text-sm shadow-md">${text}</div>`;
+                wrapper.className = "flex max-w-[85%] ml-auto justify-end animate-enter font-sans";
+                wrapper.innerHTML = `<div class="rounded-lg rounded-tr-none px-4 py-2.5 text-base" style="background-color: var(--chat-user-bg); color: var(--text-main); border: 1px solid var(--border-flat);">${text}</div>`;
             } else if (sender === 'assistant') {
-                wrapper.className = "flex max-w-[85%] animate-smooth-fade";
-                wrapper.innerHTML = `<div class="custom-card rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm leading-relaxed">${text.replace(/\n/g, '<br>')}</div>`;
+                wrapper.className = "flex max-w-[85%] animate-enter";
+                wrapper.innerHTML = `<div class="rounded-lg rounded-tl-none px-4 py-2.5 text-base leading-relaxed" style="background-color: var(--chat-bot-bg); color: var(--text-main); border: 1px solid var(--border-flat);">${text.replace(/\n/g, '<br>')}</div>`;
             } else if (sender === 'assistant-typing') {
-                wrapper.className = "flex max-w-[85%]";
+                wrapper.className = "flex max-w-[85%] font-sans";
                 wrapper.id = id;
-                wrapper.innerHTML = `<div class="custom-card rounded-xl px-4 py-2 flex items-center gap-2 text-xs font-medium text-pink"><span class="material-icons-round text-sm animate-spin">sync</span>${text}</div>`;
+                wrapper.innerHTML = `<div class="custom-card border-dashed px-4 py-2 text-xs uppercase text-muted rounded-lg flex items-center gap-2"><span class="material-icons-round text-xs animate-spin">sync</span> ${text}</div>`;
             } else {
-                wrapper.className = "flex justify-center w-full my-1 animate-smooth-fade";
-                wrapper.innerHTML = `<div class="custom-card rounded-xl px-3 py-1 text-[10px] uppercase font-bold tracking-wider text-muted">${text}</div>`;
+                wrapper.className = "flex justify-center w-full my-1 animate-enter font-sans text-muted";
+                wrapper.innerHTML = `<div class="custom-card px-4 py-1.5 rounded-lg text-xs uppercase tracking-wider">${text}</div>`;
             }
             
             container.appendChild(wrapper);
