@@ -137,7 +137,6 @@
         </div>
         
         <div class="flex items-center gap-2">
-            <!-- Быстрый доступ к магазину прямо из шапки -->
             <button onclick="openShop()" class="w-10 h-10 rounded-full border custom-border flex items-center justify-center text-[var(--text-main)] active:scale-95 transition">
                 <span class="material-icons-round text-lg text-pink">shopping_bag</span>
             </button>
@@ -175,7 +174,7 @@
             </div>
             
             <p class="text-xs font-normal leading-relaxed text-muted">
-                Не хватает кредитов? Приглашайте друзей и получайте бонусные <span class="text-[var(--text-main)] font-medium">кредиты</span> мгновенно или обменяйте <span class="text-pink font-medium">гемы</span> на кредиты через наш официальный магазин.
+                Не хватает кредитов? Приглашайте друзей и получайте бонусные <span class="text-[var(--text-main)] font-medium">кредиты</span> мгновенно или обменяйте <span class="text-pink font-medium">гемы</span> на кредиты через наш official магазин.
             </p>
             
             <div class="grid grid-cols-2 gap-3 pt-1">
@@ -234,7 +233,6 @@
     </main>
 
     <main id="view-shop" class="hidden flex-1 flex-col justify-between overflow-hidden animate-smooth-fade" style="background: var(--bg-chat-main);">
-        <!-- Shop Header -->
         <div class="custom-border border-b px-5 h-16 flex items-center justify-between z-10 backdrop-blur-md shrink-0" style="background: var(--bg-header-chat);">
             <div class="flex items-center gap-3.5 min-w-0">
                 <button onclick="closeShop()" class="w-10 h-10 rounded-xl border custom-border flex items-center justify-center text-muted active:text-[var(--text-main)] transition shrink-0">
@@ -250,9 +248,7 @@
             </div>
         </div>
 
-        <!-- Shop Scrollable Content -->
         <div class="flex-1 overflow-y-auto p-5 space-y-6 no-scrollbar">
-            <!-- Вкладки внутри модального окна -->
             <div class="flex border-b custom-border pb-2 gap-4 text-xs font-bold uppercase tracking-wider justify-between">
                 <button id="tab-buy-gems" onclick="switchShopTab('gems')" class="text-pink border-b-2 border-pink-500 pb-1 font-semibold flex items-center gap-1">
                     <span class="material-icons-round text-sm">diamond</span> Гемы
@@ -265,7 +261,6 @@
                 </button>
             </div>
             
-            <!-- Секция: Покупка Гемов -->
             <div id="shop-gems-section" class="space-y-4 animate-smooth-fade">
                 <p class="text-xs text-muted leading-relaxed">
                     Пополняйте гемы через безопасный шлюз Telegram Stars. Нажмите на пакет, чтобы совершить оплату:
@@ -304,7 +299,6 @@
                 </div>
             </div>
 
-            <!-- Секция: Покупка Наборов (Packs) -->
             <div id="shop-packs-section" class="space-y-4 hidden animate-smooth-fade">
                 <p class="text-xs text-muted leading-relaxed">
                     Покупайте наборы ресурсов в боте со скидкой через систему Telegram Stars:
@@ -342,13 +336,11 @@
                 </div>
             </div>
 
-            <!-- Секция обмена (Кредиты) -->
             <div id="shop-exchange-section" class="space-y-4 hidden animate-smooth-fade">
                 <p class="text-xs leading-relaxed text-muted">
                     Приобретайте пакеты кредитов связи напрямую за гемы, либо воспользуйтесь формой произвольного обмена.
                 </p>
                 
-                <!-- Пакеты покупки за гемы -->
                 <div class="space-y-2">
                     <label class="text-[10px] text-pink font-bold uppercase tracking-wider block">Выбрать готовый пакет связи</label>
                     <div class="grid grid-cols-1 gap-2">
@@ -387,7 +379,6 @@
 
                 <div class="h-px border-t custom-border my-2"></div>
 
-                <!-- Произвольный обмен -->
                 <div class="space-y-3">
                     <label class="text-[10px] text-pink font-bold uppercase tracking-wider block">Произвольная сумма обмена</label>
                     <p class="text-[11px] leading-relaxed text-muted">
@@ -407,7 +398,6 @@
         </div>
     </main>
 
-    <!-- Кастомное диалоговое окно подтверждения покупки за Звёзды -->
     <div id="payment-confirm-modal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-6 backdrop-blur-sm animate-smooth-fade">
         <div class="custom-card w-full max-w-xs rounded-2xl p-5 space-y-4 text-center">
             <div class="w-12 h-12 rounded-full bg-pink-500/10 flex items-center justify-center mx-auto text-[var(--accent-pink)]">
@@ -488,7 +478,7 @@
             }
         }
 
-        // Красивое кастомное модальное подтверждение вместо обычных системных диалогов
+        // Красивое кастомное модальное подтверждение с интеграцией Нативной оплаты Stars
         function confirmPurchase(itemName, starsCount, category) {
             const modal = document.getElementById('payment-confirm-modal');
             const textEl = document.getElementById('confirm-modal-text');
@@ -496,9 +486,57 @@
             
             textEl.innerHTML = `Вы хотите оплатить <span class="text-[var(--text-main)] font-semibold">${itemName}</span> за <span class="text-pink font-bold">${starsCount}</span> <span class="material-icons-round text-xs text-amber-400 align-middle">star</span>?`;
             
-            pendingConfirmAction = () => {
-                redirectToBotShop(category);
+            pendingConfirmAction = async () => {
                 closeConfirmModal();
+                
+                let itemType = category === 'packs' ? 'pack' : 'gems';
+                let itemId = "";
+                
+                if (itemType === 'gems') {
+                    if (starsCount === 50) itemId = "50";
+                    else if (starsCount === 125) itemId = "150";
+                    else if (starsCount === 350) itemId = "500";
+                    else if (starsCount === 750) itemId = "1200";
+                    else if (starsCount === 1500) itemId = "3000";
+                } else {
+                    if (starsCount === 350) itemId = "starter";
+                    else if (starsCount === 1000) itemId = "premium";
+                    else if (starsCount === 2500) itemId = "ultra";
+                }
+                
+                try {
+                    const response = await fetch(`${BACKEND_URL}/api/create-invoice-link`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            user_id: userId,
+                            item_type: itemType,
+                            item_id: itemId
+                        })
+                    });
+                    
+                    if (!response.ok) {
+                        const err = await response.json();
+                        showNotification(err.detail || "Ошибка создания инвойса.");
+                        return;
+                    }
+                    
+                    const data = await response.json();
+                    if (data.invoice_url) {
+                        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openInvoice) {
+                            window.Telegram.WebApp.openInvoice(data.invoice_url, function(status) {
+                                if (status === 'paid') {
+                                    alert("Оплата успешна!");
+                                    loadProfile();
+                                }
+                            });
+                        } else {
+                            window.open(data.invoice_url, '_blank');
+                        }
+                    }
+                } catch (error) {
+                    showNotification("Ошибка связи с сервером оплаты.");
+                }
             };
             
             modal.classList.remove('hidden');
